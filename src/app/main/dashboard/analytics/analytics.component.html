@@ -22,9 +22,9 @@
       </div> -->
       <!--/ Congratulations Card -->
 
-      <div class="col-lg-3 col-sm-6 col-12">
+      <div class="col-lg-4 col-sm-6 col-12">
         <div class="card">
-          <div class="card-header d-flex flex-column align-items-start pb-0">
+          <div class="card-header d-flex flex-column align-items-start pb-2">
             <div class="avatar bg-light-primary p-50 m-0">
               <div class="avatar-content">
                 <i data-feather="edit" class="font-medium-5"></i>
@@ -34,13 +34,15 @@
             <h5 class="mb-1">Daily Tasks : {{dailyTasks}}</h5>
             <h5 class="mb-1">Weekly Tasks : {{weeklyTasks}}</h5>
             <h5 class="mb-1">Overdue Tasks : {{overdueTasks}}</h5>
-
+      <a class="navbar-brand" [routerLink]="['/dashboard/taskManager']">
+            <button class="mb-2" type="button" class="btn btn-outline-primary" rippleEffect>View</button>
+            </a>
           </div>
         </div>
       </div>
-      <div class="col-lg-3 col-sm-6 col-12">
+      <div class="col-lg-4 col-sm-6 col-12">
         <div class="card">
-          <div class="card-header d-flex flex-column align-items-start pb-0">
+          <div class="card-header d-flex flex-column align-items-start pb-2">
             <div class="avatar bg-light-primary p-50 m-0">
               <div class="avatar-content">
                 <i data-feather="users" class="font-medium-5"></i>
@@ -50,13 +52,15 @@
             <h5 class="mb-1">IFM Staff : {{facilityMembers}}</h5>
             <h5 class="mb-1">Guards : {{guardsList}}</h5>
             <h5 class="mb-1">Vendors : {{vendors}}</h5>
-
+            <a class="navbar-brand" [routerLink]="['/dashboard/taskManager']">
+              <button class="mb-2" type="button" class="btn btn-outline-primary" rippleEffect>View</button>
+              </a>
           </div>
         </div>
       </div>
-      <div class="col-lg-3 col-sm-6 col-12">
+      <div class="col-lg-4 col-sm-6 col-12">
         <div class="card">
-          <div class="card-header d-flex flex-column align-items-start pb-0">
+          <div class="card-header d-flex flex-column align-items-start pb-2">
             <div class="avatar bg-light-primary p-50 m-0">
               <div class="avatar-content">
                 <i data-feather="search" class="font-medium-5"></i>
@@ -66,7 +70,9 @@
             <h5 class="mb-1">Supervisors : {{supervisors}}</h5>
             <h5 class="mb-1">Trainers : {{trainers}}</h5>
             <h5 class="mb-1">Managers : {{managers}}</h5>
-
+            <a class="navbar-brand" [routerLink]="['/dashboard/taskManager']">
+              <button class="mb-2" type="button" class="btn btn-outline-primary" rippleEffect>View</button>
+              </a>
           </div>                                                                                                      
         </div>
       </div>

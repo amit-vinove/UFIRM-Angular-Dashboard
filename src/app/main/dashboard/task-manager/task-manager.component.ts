@@ -198,25 +198,49 @@ export class TaskManagerComponent implements OnInit {
         });
   
       // Get the dashboard service data
-      this._dashboardService.getAllProperties().subscribe(response => {
-        this.selectProperty = response
-      });
-      this._dashboardService.getAllCategories().subscribe(response => {
-        this.selectCategory = response
-      });
-      this._dashboardService.getAllTaskPriorities().subscribe(response => {
-        this.selectTaskPriority = response
-      });
-      this._dashboardService.getDailyTaskDetails().subscribe(response=>{
-        this.dailyTasks = response.length
-      })
-      this._dashboardService.getWeeklyTaskDetails().subscribe(response=>{
-        this.weeklyTasks = response.length
-      })
+      this.getAllProperties()
+      this.getAllCategories()
+      this.getAllTaskPriorities()
+      this.getDailyTaskDetails()
+      this.getWeeklyTaskDetails()
       this.getAllTaskWiseSummary()
       this.getAllCategoryWiseTasks()
       this.getCategoryWiseTaskSummary()
       this.getTaskWiseSummary()
+    }
+
+    filterData(){
+
+    }
+
+    getAllProperties(){
+      this._dashboardService.getAllProperties().subscribe(response => {
+        this.selectProperty = response
+      });
+    }
+
+    getAllCategories(){
+      this._dashboardService.getAllCategories().subscribe(response => {
+        this.selectCategory = response
+      });
+    }
+
+    getAllTaskPriorities(){
+      this._dashboardService.getAllTaskPriorities().subscribe(response => {
+        this.selectTaskPriority = response
+      });
+    }
+
+    getDailyTaskDetails(){
+      this._dashboardService.getDailyTaskDetails().subscribe(response=>{
+        this.dailyTasks = response.length
+      })
+    }
+
+    getWeeklyTaskDetails(){
+      this._dashboardService.getWeeklyTaskDetails().subscribe(response=>{
+        this.weeklyTasks = response.length
+      })
     }
   
     categorySelection(category:any){

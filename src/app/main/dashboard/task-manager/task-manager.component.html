@@ -53,7 +53,7 @@
               <div class="col-12 col-md-3">
                 <fieldset class="form-group">
                   <ng-select [items]="selectProperty" [(ngModel)]="selectedProperty" name="selectedProperty"
-                    bindLabel="Name" placeholder="Select Property"></ng-select>
+                    bindLabel="Name" placeholder="Select Property" ></ng-select>
                 </fieldset>
               </div>
               <div class="col-12 col-md-3">
@@ -86,7 +86,7 @@
                     bindLabel="Name" placeholder="Select Task Priority"></ng-select>
                 </fieldset>
               </div>
-              <div class="col-12 col-md-2">
+              <div class="col-12 col-md-3">
                 <div class="input-group">
                   <input class="form-control" placeholder="Date From" name="Basic Date Picker"
                     [(ngModel)]="selectedDateFrom" ngbDatepicker #basicDPfrom="ngbDatepicker">
@@ -96,7 +96,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-12 col-md-2">
+              <div class="col-12 col-md-3">
                 <div class="input-group">
                   <input class="form-control" placeholder="Date To" name="Basic Date Picker"
                     [(ngModel)]="selectedDateTo" ngbDatepicker #basicDPto="ngbDatepicker">
@@ -117,7 +117,7 @@
     </div>
 
     <div class="row match-height">
-      <div class="col-lg-3 col-sm-6 col-12">
+      <div class="col-lg-5 col-sm-6 col-12">
         <div class="card">
           <div class="card-body">
             <div id="bar-chart" #apexBarChartRef>
@@ -134,7 +134,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-3 col-sm-6 col-12">
+      <div class="col-lg-5 col-sm-6 col-12">
         <div class="card">
           <div class="card-body">
             <div id="donut-chart" #apexDonutChartRef>
@@ -149,7 +149,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-6 col-sm-6 col-12">
+      <div class="col-lg-8 col-sm-6 col-12">
         <div class="card">
           <div class="card-body">
             <div id="column-chart" #apexColumnChartRef>
