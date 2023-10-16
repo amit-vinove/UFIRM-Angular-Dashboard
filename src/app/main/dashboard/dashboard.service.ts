@@ -18,6 +18,27 @@ export class DashboardService {
   constructor(private _httpClient: HttpClient) {
   }
 
+  getParams(payload:any){
+    let params = new HttpParams();
+
+    const parameterKeys = [
+      'propId',
+      'categoryId',
+      'subCategoryId',
+      'occurance',
+      'status',
+      'priorityId',
+      'dateFrom',
+      'dateTo'
+    ];
+    parameterKeys.forEach(key => {
+      if (payload[key]) {
+        params = params.append(key, payload[key]);
+      }
+    });
+    return params
+  }
+
 
   /**
    * Get Api Data
@@ -55,148 +76,24 @@ export class DashboardService {
     return this._httpClient.get(`${environment.apiUrl}/GetAllEmployeeWiseTaskSummary`);
   }
   getAllTaskWiseSummary(payload:any): Observable<any> {
-    let params = new HttpParams();
-
-    if(payload.propId) {
-      params = params.append('propId', payload.propId);
-    }
-    if(payload.categoryId) {
-      params = params.append('categoryId', payload.categoryId);
-    }
-
-    if(payload.subCategoryId) {
-      params = params.append('subCategoryId', payload.subCategoryId);
-    }
-
-    if(payload.occurance) {
-      params = params.append('occurance', payload.occurance);
-    }
-
-    if(payload.status) {
-      params = params.append('status', payload.status);
-    }
-
-    if(payload.priorityId) {
-      params = params.append('priorityId', payload.priorityId);
-    }
-
-    if(payload.dateFrom) {
-      params = params.append('dateFrom', payload.dateFrom);
-    }
-
-    if(payload.dateTo) {
-      params = params.append('dateTo', payload.dateTo);
-    }
+    const params = this.getParams(payload)
     return this._httpClient.get(`${environment.apiUrl}/GetAllTaskWiseSummary`,{params});
   }
   getAllCategoryWiseTasks(payload:any): Observable<any> {
-    let params = new HttpParams();
-
-    if(payload.propId) {
-      params = params.append('propId', payload.propId);
-    }
-    if(payload.categoryId) {
-      params = params.append('categoryId', payload.categoryId);
-    }
-
-    if(payload.subCategoryId) {
-      params = params.append('subCategoryId', payload.subCategoryId);
-    }
-
-    if(payload.occurance) {
-      params = params.append('occurance', payload.occurance);
-    }
-
-    if(payload.status) {
-      params = params.append('status', payload.status);
-    }
-
-    if(payload.priorityId) {
-      params = params.append('priorityId', payload.priorityId);
-    }
-
-    if(payload.dateFrom) {
-      params = params.append('dateFrom', payload.dateFrom);
-    }
-
-    if(payload.dateTo) {
-      params = params.append('dateTo', payload.dateTo);
-    }
+    const params = this.getParams(payload)
     return this._httpClient.get(
       `${environment.apiUrl}/GetAllCategoryWiseTasks`,{params},
     );
   }
   getAllCategoryWiseTaskSummaryChart(payload): Observable<any> {
-    let params = new HttpParams();
-
-    if(payload.propId) {
-      params = params.append('propId', payload.propId);
-    }
-    if(payload.categoryId) {
-      params = params.append('categoryId', payload.categoryId);
-    }
-
-    if(payload.subCategoryId) {
-      params = params.append('subCategoryId', payload.subCategoryId);
-    }
-
-    if(payload.occurance) {
-      params = params.append('occurance', payload.occurance);
-    }
-
-    if(payload.status) {
-      params = params.append('status', payload.status);
-    }
-
-    if(payload.priorityId) {
-      params = params.append('priorityId', payload.priorityId);
-    }
-
-    if(payload.dateFrom) {
-      params = params.append('dateFrom', payload.dateFrom);
-    }
-
-    if(payload.dateTo) {
-      params = params.append('dateTo', payload.dateTo);
-    }
+    const params = this.getParams(payload)
     return this._httpClient.get(
       `${environment.apiUrl}/GetAllCategoryWiseTaskSummaryChart`,{params},
     );
   }
 
   getAllTaskWiseSummaryChart(payload): Observable<any> {
-    let params = new HttpParams();
-
-    if(payload.propId) {
-      params = params.append('propId', payload.propId);
-    }
-    if(payload.categoryId) {
-      params = params.append('categoryId', payload.categoryId);
-    }
-
-    if(payload.subCategoryId) {
-      params = params.append('subCategoryId', payload.subCategoryId);
-    }
-
-    if(payload.occurance) {
-      params = params.append('occurance', payload.occurance);
-    }
-
-    if(payload.status) {
-      params = params.append('status', payload.status);
-    }
-
-    if(payload.priorityId) {
-      params = params.append('priorityId', payload.priorityId);
-    }
-
-    if(payload.dateFrom) {
-      params = params.append('dateFrom', payload.dateFrom);
-    }
-
-    if(payload.dateTo) {
-      params = params.append('dateTo', payload.dateTo);
-    }
+    const params = this.getParams(payload)
     return this._httpClient.get(`${environment.apiUrl}/GetAllTaskWiseSummaryChart`,{params});
   }
 
