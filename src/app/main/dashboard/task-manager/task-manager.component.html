@@ -107,8 +107,8 @@
                 </div>
               </div>
               <div class="col-12 col-md-3">
-                <button type="button" class="btn btn-outline-danger" rippleEffect>Reset</button>&nbsp;&nbsp;
-                <button type="button" class="btn btn-primary" rippleEffect>Filter</button>
+                <button type="button" class="btn btn-outline-danger" rippleEffect (click)="resetData()">Reset</button>&nbsp;&nbsp;
+                <button type="button" class="btn btn-primary" rippleEffect (click)="filterData()">Filter</button>
               </div>
             </div>
           </form>
@@ -117,10 +117,10 @@
     </div>
 
     <div class="row match-height">
-      <div class="col-lg-5 col-sm-6 col-12">
+      <div class="col-lg-3 col-sm-6 col-12">
         <div class="card">
           <div class="card-body">
-            <div id="bar-chart" #apexBarChartRef>
+            <div id="bar-chart" #apexBarChartRef *ngIf="categoryWiseData.length>0">
               <apx-chart [series]="apexBarChart.series" [chart]="{
                     height: 400,
                     width: 300,
@@ -131,13 +131,17 @@
                   }" [dataLabels]="apexBarChart.dataLabels" [plotOptions]="apexBarChart.plotOptions"
                 [xaxis]="apexBarChart.xaxis" [colors]="apexBarChart.colors" [grid]="apexBarChart.grid"></apx-chart>
             </div>
+            <div class="noData-div" *ngIf="categoryWiseData.length == 0">
+              <img src="assets/images/icons/noFile.png" alt="brand-logo" class="noData-img"/>
+              <h3 class="noData-text">No Data Available</h3>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-lg-5 col-sm-6 col-12">
+      <div class="col-lg-3 col-sm-6 col-12">
         <div class="card">
           <div class="card-body">
-            <div id="donut-chart" #apexDonutChartRef>
+            <div id="donut-chart" #apexDonutChartRef *ngIf="categoryWiseTaskSummaryData.length>0">
               <apx-chart [series]="apexDonutChart.series" [chart]="{
                     height: 500,
                     width: 300,
@@ -146,13 +150,17 @@
                 [responsive]="apexDonutChart.responsive" [colors]="apexDonutChart.colors"
                 [legend]="apexDonutChart.legend"></apx-chart>
             </div>
+            <div class="noData-div" *ngIf="categoryWiseTaskSummaryData.length == 0">
+              <img src="assets/images/icons/noFile.png" alt="brand-logo" class="noData-img"/>
+              <h3 class="noData-text">No Data Available</h3>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-lg-8 col-sm-6 col-12">
+      <div class="col-lg-6 col-sm-6 col-12">
         <div class="card">
           <div class="card-body">
-            <div id="column-chart" #apexColumnChartRef>
+            <div id="column-chart" #apexColumnChartRef *ngIf="taskWiseSummaryData.length>0">
               <apx-chart [series]="apexColumnChart.series" [chart]="{
                     type: 'bar',
                     height: 400,
@@ -165,6 +173,10 @@
                 [tooltip]="apexColumnChart.tooltip" [colors]="apexColumnChart.colors" [legend]="apexColumnChart.legend"
                 [dataLabels]="apexColumnChart.dataLabels" [plotOptions]="apexColumnChart.plotOptions"
                 [grid]="apexColumnChart.grid"></apx-chart>
+            </div>
+            <div class="noData-div" *ngIf="taskWiseSummaryData.length == 0">
+              <img src="assets/images/icons/noFile.png" alt="brand-logo" class="noData-img"/>
+              <h3 class="noData-text">No Data Available</h3>
             </div>
           </div>
         </div>

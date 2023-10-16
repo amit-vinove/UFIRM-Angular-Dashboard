@@ -104,22 +104,22 @@ export class TaskManagerComponent implements OnInit {
   ];
   public selectRepeatFrequency: any = [
     { name: 'All', value: '' },
-    { name: 'Daily', value: 'Daily' },
-    { name: 'Weekly', value: 'Weekly' },
-    { name: 'Monthly', value:'Monthly' },
-    { name: 'Yearly', value: 'Yearly' }
+    { name: 'Daily', value: 'D' },
+    { name: 'Weekly', value: 'W' },
+    { name: 'Monthly', value:'M' },
+    { name: 'Yearly', value: 'Y' }
   ];
   public selectTaskPriority: any = [];
 
 
-  public selectedProperty = [];
-  public selectedCategory = [];
-  public selectedSubCategory = [];
-  public selectedRepeatFrequency = [];
-  public selectedTaskStatus = [];
-  public selectedTaskPriority = [];
-  public selectedDateFrom = [];
-  public selectedDateTo = [];
+  public selectedProperty:any = [];
+  public selectedCategory:any = [];
+  public selectedSubCategory:any = [];
+  public selectedRepeatFrequency:any = [];
+  public selectedTaskStatus:any = [];
+  public selectedTaskPriority:any = [];
+  public selectedDateFrom:any = [];
+  public selectedDateTo:any = [];
 
   public taskSummaryData=[]
 
@@ -210,7 +210,24 @@ export class TaskManagerComponent implements OnInit {
     }
 
     filterData(){
-
+      this.getAllCategoryWiseTasks()
+      this.getCategoryWiseTaskSummary()
+      this.getTaskWiseSummary()
+      this.getAllTaskWiseSummary()
+    }
+    resetData(){
+      this.selectedProperty = []
+      this.selectedCategory=[]
+      this.selectedSubCategory=[]
+      this.selectedRepeatFrequency = []
+      this.selectedTaskStatus=[]
+      this.selectedTaskPriority = []
+      this.selectedDateFrom = []
+      this.selectedDateTo=[]
+      this.getAllCategoryWiseTasks()
+      this.getCategoryWiseTaskSummary()
+      this.getTaskWiseSummary()
+      this.getAllTaskWiseSummary()
     }
 
     getAllProperties(){
@@ -250,27 +267,68 @@ export class TaskManagerComponent implements OnInit {
     }
 
     getAllTaskWiseSummary(){
-      this._dashboardService.getAllTaskWiseSummary().subscribe(res=>{
+      let payload={
+        propId : this.selectedProperty?.PropertyId ? this.selectedProperty?.PropertyId :0 ,
+        categoryId:this.selectedCategory?.catId ? this.selectedCategory?.catId : 0,
+        subCategoryId:this.selectedSubCategory?.SubCategoryId ? this.selectedSubCategory?.SubCategoryId : 0,
+        occurance : this.selectedRepeatFrequency?.value ? this.selectedRepeatFrequency?.value : '',
+        status : this.selectedTaskStatus?.value ? this.selectedTaskStatus?.value : '',
+        priorityId : this.selectedTaskPriority?.Id ? this.selectedTaskPriority?.Id : 0,
+        dateFrom : this.selectedDateFrom?.length !==0 ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateTo?.day}`:'',
+        dateTo : this.selectedDateTo?.length !== 0  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
+      }
+      this.taskSummaryData=[]
+      this._dashboardService.getAllTaskWiseSummary(payload).subscribe(res=>{
         this.taskSummaryData = res
       })
     }
+    // taskName , Date, assigned TO, weekly,
 
     getAllCategoryWiseTasks(){
-      this._dashboardService.getAllCategoryWiseTasks(4).subscribe(res=>{
+      let payload={
+        propId : this.selectedProperty?.PropertyId ? this.selectedProperty?.PropertyId :0 ,
+        categoryId:this.selectedCategory?.catId ? this.selectedCategory?.catId : 0,
+        subCategoryId:this.selectedSubCategory?.SubCategoryId ? this.selectedSubCategory?.SubCategoryId : 0,
+        occurance : this.selectedRepeatFrequency?.value ? this.selectedRepeatFrequency?.value : '',
+        status : this.selectedTaskStatus?.value ? this.selectedTaskStatus?.value : '',
+        priorityId : this.selectedTaskPriority?.Id ? this.selectedTaskPriority?.Id : 0,
+        dateFrom : this.selectedDateFrom?.length !==0 ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateTo?.day}`:'',
+        dateTo : this.selectedDateTo?.length !== 0  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
+      }
+      this._dashboardService.getAllCategoryWiseTasks(payload).subscribe(res=>{
         this.categoryWiseData = res
         this.initializeCategoryWiseTaskOptions(this.categoryWiseData)
       })
     }
 
     getCategoryWiseTaskSummary(){
-      this._dashboardService.getAllCategoryWiseTaskSummaryChart().subscribe(res=>{
+      let payload={
+        propId : this.selectedProperty?.PropertyId ? this.selectedProperty?.PropertyId :0 ,
+        categoryId:this.selectedCategory?.catId ? this.selectedCategory?.catId : 0,
+        subCategoryId:this.selectedSubCategory?.SubCategoryId ? this.selectedSubCategory?.SubCategoryId : 0,
+        occurance : this.selectedRepeatFrequency?.value ? this.selectedRepeatFrequency?.value : '',
+        status : this.selectedTaskStatus?.value ? this.selectedTaskStatus?.value : '',
+        priorityId : this.selectedTaskPriority?.Id ? this.selectedTaskPriority?.Id : 0,
+        dateFrom : this.selectedDateFrom?.length !==0 ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateTo?.day}`:'',
+        dateTo : this.selectedDateTo?.length !== 0  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
+      }
+      this._dashboardService.getAllCategoryWiseTaskSummaryChart(payload).subscribe(res=>{
         this.categoryWiseTaskSummaryData = res
-        this.initializeCategoryWiseTaskSummary(this.categoryWiseData)
+        this.initializeCategoryWiseTaskSummary(this.categoryWiseTaskSummaryData)
       })
     }
     getTaskWiseSummary(){
-      this._dashboardService.getAllTaskWiseSummaryChart().subscribe(res=>{
-        console.log(res)
+      let payload={
+        propId : this.selectedProperty?.PropertyId ? this.selectedProperty?.PropertyId :0 ,
+        categoryId:this.selectedCategory?.catId ? this.selectedCategory?.catId : 0,
+        subCategoryId:this.selectedSubCategory?.SubCategoryId ? this.selectedSubCategory?.SubCategoryId : 0,
+        occurance : this.selectedRepeatFrequency?.value ? this.selectedRepeatFrequency?.value : '',
+        status : this.selectedTaskStatus?.value ? this.selectedTaskStatus?.value : '',
+        priorityId : this.selectedTaskPriority?.Id ? this.selectedTaskPriority?.Id : 0,
+        dateFrom : this.selectedDateFrom?.length !==0 ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateTo?.day}`:'',
+        dateTo : this.selectedDateTo?.length !== 0  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
+      }
+      this._dashboardService.getAllTaskWiseSummaryChart(payload).subscribe(res=>{
         this.taskWiseSummaryData = res
         this.initializeTaskSummary(this.taskWiseSummaryData)
       })
