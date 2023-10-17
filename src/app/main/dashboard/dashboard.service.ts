@@ -43,6 +43,8 @@ export class DashboardService {
   /**
    * Get Api Data
    */
+
+  //Task Manager API
   getAllProperties(): Observable<any> {
     return this._httpClient.get(`${environment.apiUrl}/GetAllProperties`);
   }
@@ -61,20 +63,6 @@ export class DashboardService {
   getWeeklyTaskDetails(): Observable<any> {
     return this._httpClient.get(`${environment.apiUrl}/TaskDetails?occurrence=W`);
   }
-  getAllFacilityMembers(): Observable<any> {
-    return this._httpClient.get(`${environment.apiUrl}/GetAllFacilityMembers`);
-  }
-  getGuardsList(): Observable<any> {
-    return this._httpClient.get(`${environment.apiUrl}/GuardList`);
-  }
-  getEmployeeDesignationCount(propId: number): Observable<any> {
-    return this._httpClient.get(
-      `${environment.apiUrl}/EmployeeDesignationCount?propId=${propId}`
-    );
-  }
-  getAllEmployeeWiseTaskSummary(): Observable<any> {
-    return this._httpClient.get(`${environment.apiUrl}/GetAllEmployeeWiseTaskSummary`);
-  }
   getAllTaskWiseSummary(payload:any): Observable<any> {
     const params = this.getParams(payload)
     return this._httpClient.get(`${environment.apiUrl}/GetAllTaskWiseSummary`,{params});
@@ -91,10 +79,35 @@ export class DashboardService {
       `${environment.apiUrl}/GetAllCategoryWiseTaskSummaryChart`,{params},
     );
   }
-
   getAllTaskWiseSummaryChart(payload): Observable<any> {
     const params = this.getParams(payload)
     return this._httpClient.get(`${environment.apiUrl}/GetAllTaskWiseSummaryChart`,{params});
+  }
+
+  //Facility Members API
+  getAllFacilityMembers(): Observable<any> {
+    return this._httpClient.get(`${environment.apiUrl}/GetAllFacilityMembers`);
+  }
+  getGuardsList(): Observable<any> {
+    return this._httpClient.get(`${environment.apiUrl}/GuardList`);
+  }
+  getEmployeeDesignationCount(payload:any): Observable<any> {
+    const params = this.getParams(payload)
+    return this._httpClient.get(
+      `${environment.apiUrl}/EmployeeDesignationCount`,{params}
+    );
+  }
+  getAllEmployeeAttendanceSummary(payload): Observable<any> {
+    const params = this.getParams(payload)
+    return this._httpClient.get(`${environment.apiUrl}/EmployeeAttendanceSummaryCount`,{params});
+  }
+  getAllEmployeeWiseTaskSummaryChartData(payload): Observable<any> {
+    const params = this.getParams(payload)
+    return this._httpClient.get(`${environment.apiUrl}/GetAllEmployeeWiseTaskSummaryChartData`,{params});
+  }
+  getAllEmployeeWiseTaskSummary(payload): Observable<any> {
+    const params = this.getParams(payload)
+    return this._httpClient.get(`${environment.apiUrl}/GetAllEmployeeWiseTaskSummary`,{params});
   }
 
 }

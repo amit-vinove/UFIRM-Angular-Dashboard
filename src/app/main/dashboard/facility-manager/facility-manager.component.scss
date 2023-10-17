@@ -1,0 +1,24 @@
+@import '@core/scss/base/plugins/charts/chart-apex.scss';
+@import '@core/scss/angular/libs/toastr.component.scss';
+@import '@core/scss/angular/libs/datatables.component.scss';
+@import '@core/scss/base/pages/app-user.scss';
+@import '@core/scss/angular/libs/select.component.scss';
+
+.statistics-body{
+    padding-bottom: unset !important;
+}
+.filter-title{
+    padding-top: unset !important;
+    padding-left: unset !important;
+}
+.noData-div{
+    position: relative;
+    top: 10%;
+}
+.noData-text{
+    text-align: center;
+}
+.noData-img{
+    display: block;
+    margin: 0 auto;
+}

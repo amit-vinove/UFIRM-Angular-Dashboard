@@ -20,6 +20,7 @@ import { DashboardService } from 'app/main/dashboard/dashboard.service';
 import { AnalyticsComponent } from 'app/main/dashboard/analytics/analytics.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TaskManagerComponent } from './task-manager/task-manager.component';
+import { FacilityManagerComponent } from './facility-manager/facility-manager.component';
 
 const routes = [
   {
@@ -34,10 +35,16 @@ const routes = [
     canActivate: [AuthGuard],
     data: { roles: [Role.Admin], animation: 'danalytics' },
   },
+  {
+    path: 'facilityManager',
+    component: FacilityManagerComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Admin], animation: 'danalytics' },
+  },
 ];
 
 @NgModule({
-  declarations: [AnalyticsComponent, TaskManagerComponent],
+  declarations: [AnalyticsComponent, TaskManagerComponent, FacilityManagerComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),

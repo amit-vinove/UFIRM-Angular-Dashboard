@@ -68,12 +68,12 @@ export interface ChartOptions2 {
 }
 
 @Component({
-  selector: 'app-task-manager',
-  templateUrl: './task-manager.component.html',
-  styleUrls: ['./task-manager.component.scss'],
+  selector: 'app-facility-manager',
+  templateUrl: './facility-manager.component.html',
+  styleUrls: ['./facility-manager.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class TaskManagerComponent implements OnInit {
+export class FacilityManagerComponent implements OnInit {
   
   @ViewChild('apexBarChartRef') apexBarChartRef: any;
   @ViewChild('apexDonutChartRef') apexDonutChartRef: any;
@@ -122,16 +122,14 @@ export class TaskManagerComponent implements OnInit {
   public selectedDateFrom:any = [];
   public selectedDateTo:any = [];
 
-  public taskSummaryData=[]
+  public employeetaskSummaryData=[]
+  public employeeDesignationData=[]
+  public employeeAttendanceSummaryData=[]
+  public employeeTaskSummaryChartData=[]
 
-  public categoryWiseData=[]
-  
-  public categoryWiseTaskSummaryData=[]
-  public taskWiseSummaryData=[]
-
-  public dailyTasks:any=''
-  public weeklyTasks:any=''
-  public overdueTasks:any=19
+  public facilityMembers:any=''
+  public guards:any=''
+  public vendors:any=19
 
     // Color Variables
     chartColors = {
@@ -205,18 +203,18 @@ export class TaskManagerComponent implements OnInit {
       this.getAllProperties()
       this.getAllCategories()
       this.getAllTaskPriorities()
-      this.getDailyTaskDetails()
-      this.getWeeklyTaskDetails()
+      this.getAllFacilityMembers()
+      this.getAllGuardsList()
       this.getAllTaskWiseSummary()
-      this.getAllCategoryWiseTasks()
-      this.getCategoryWiseTaskSummary()
-      this.getTaskWiseSummary()
+      this.getEmployeeDesignationCount()
+      this.getEmployeeAttendanceSummary()
+      this.getEmployeeTaskSummary()
     }
 
     filterData(){
-      this.getAllCategoryWiseTasks()
-      this.getCategoryWiseTaskSummary()
-      this.getTaskWiseSummary()
+      this.getEmployeeDesignationCount()
+      this.getEmployeeAttendanceSummary()
+      this.getEmployeeTaskSummary()
       this.getAllTaskWiseSummary()
     }
     resetData(){
@@ -228,9 +226,9 @@ export class TaskManagerComponent implements OnInit {
       this.selectedTaskPriority = []
       this.selectedDateFrom = []
       this.selectedDateTo=[]
-      this.getAllCategoryWiseTasks()
-      this.getCategoryWiseTaskSummary()
-      this.getTaskWiseSummary()
+      this.getEmployeeDesignationCount()
+      this.getEmployeeAttendanceSummary()
+      this.getEmployeeTaskSummary()
       this.getAllTaskWiseSummary()
     }
 
@@ -252,15 +250,15 @@ export class TaskManagerComponent implements OnInit {
       });
     }
 
-    getDailyTaskDetails(){
-      this._dashboardService.getDailyTaskDetails().subscribe(response=>{
-        this.dailyTasks = response.length
+    getAllFacilityMembers(){
+      this._dashboardService.getAllFacilityMembers().subscribe(response=>{
+        this.facilityMembers = response.length
       })
     }
 
-    getWeeklyTaskDetails(){
-      this._dashboardService.getWeeklyTaskDetails().subscribe(response=>{
-        this.weeklyTasks = response.length
+    getAllGuardsList(){
+      this._dashboardService.getGuardsList().subscribe(response=>{
+        this.guards = response.length
       })
     }
 
@@ -290,14 +288,14 @@ export class TaskManagerComponent implements OnInit {
         dateFrom : this.selectedDateFrom?.length !==0 ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateTo?.day}`:'',
         dateTo : this.selectedDateTo?.length !== 0  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
       }
-      this.taskSummaryData=[]
-      this._dashboardService.getAllTaskWiseSummary(payload).subscribe(res=>{
-        this.taskSummaryData = res
+      this.employeetaskSummaryData=[]
+      this._dashboardService.getAllEmployeeWiseTaskSummary(payload).subscribe(res=>{
+        this.employeetaskSummaryData = res
       })
     }
     // taskName , Date, assigned TO, weekly,
 
-    getAllCategoryWiseTasks(){
+    getEmployeeDesignationCount(){
       let payload={
         propId : this.selectedProperty?.PropertyId ? this.selectedProperty?.PropertyId :0 ,
         categoryId:this.selectedCategory?.catId ? this.selectedCategory?.catId : 0,
@@ -308,13 +306,13 @@ export class TaskManagerComponent implements OnInit {
         dateFrom : this.selectedDateFrom?.length !==0 ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateTo?.day}`:'',
         dateTo : this.selectedDateTo?.length !== 0  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
       }
-      this._dashboardService.getAllCategoryWiseTasks(payload).subscribe(res=>{
-        this.categoryWiseData = res
-        this.initializeCategoryWiseTaskOptions(this.categoryWiseData)
+      this._dashboardService.getEmployeeDesignationCount(payload).subscribe(res=>{
+        this.employeeDesignationData = res
+        this.initializeDesignationCountChartOptions(this.employeeDesignationData)
       })
     }
 
-    getCategoryWiseTaskSummary(){
+    getEmployeeAttendanceSummary(){
       let payload={
         propId : this.selectedProperty?.PropertyId ? this.selectedProperty?.PropertyId :0 ,
         categoryId:this.selectedCategory?.catId ? this.selectedCategory?.catId : 0,
@@ -325,14 +323,15 @@ export class TaskManagerComponent implements OnInit {
         dateFrom : this.selectedDateFrom?.length !==0 ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateTo?.day}`:'',
         dateTo : this.selectedDateTo?.length !== 0  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
       }
-      this._dashboardService.getAllCategoryWiseTaskSummaryChart(payload).subscribe(res=>{
-        this.categoryWiseTaskSummaryData = res
-        this.initializeCategoryWiseTaskSummary(this.categoryWiseTaskSummaryData)
+      this._dashboardService.getAllEmployeeAttendanceSummary(payload).subscribe(res=>{
+        this.employeeAttendanceSummaryData = res
+        this.initializeEmployeeAttendanceSummary(this.employeeAttendanceSummaryData)
       })
     }
-    getTaskWiseSummary(){
+    getEmployeeTaskSummary(){
       let payload={
-        propId : this.selectedProperty?.PropertyId ? this.selectedProperty?.PropertyId :0 ,
+        // propId : this.selectedProperty?.PropertyId ? this.selectedProperty?.PropertyId :0 ,
+        propId : this.selectedProperty?.PropertyId ? this.selectedProperty?.PropertyId :4 ,
         categoryId:this.selectedCategory?.catId ? this.selectedCategory?.catId : 0,
         subCategoryId:this.selectedSubCategory?.SubCategoryId ? this.selectedSubCategory?.SubCategoryId : 0,
         occurance : this.selectedRepeatFrequency?.value ? this.selectedRepeatFrequency?.value : '',
@@ -341,9 +340,9 @@ export class TaskManagerComponent implements OnInit {
         dateFrom : this.selectedDateFrom?.length !==0 ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateTo?.day}`:'',
         dateTo : this.selectedDateTo?.length !== 0  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
       }
-      this._dashboardService.getAllTaskWiseSummaryChart(payload).subscribe(res=>{
-        this.taskWiseSummaryData = res
-        this.initializeTaskSummary(this.taskWiseSummaryData)
+      this._dashboardService.getAllEmployeeWiseTaskSummaryChartData(payload).subscribe(res=>{
+        this.employeeTaskSummaryChartData = res
+        this.initializeEmployeeTaskSummaryChart(this.employeeTaskSummaryChartData)
       })
     }
 
@@ -351,34 +350,39 @@ export class TaskManagerComponent implements OnInit {
       this.getAllTaskWiseSummary();
     }
   
-    getCategories(){
-      let categories=[]
-      this.categoryWiseData.forEach((ele)=>{
-        categories.push(ele.Category)
+    getDesignation(){
+      let designations=[]
+      this.employeeDesignationData.forEach((ele)=>{
+        designations.push(ele.Designation)
       })
-      return categories
+      return designations
     }
-    getCategoryTaskCount(){
-      let categories=[]
-      this.categoryWiseData.forEach((ele)=>{
-        categories.push(ele.Count)
+    getDesignationCount(){
+      let designations=[]
+      this.employeeDesignationData.forEach((ele)=>{
+        designations.push(ele.Count)
       })
-      return categories
+      return designations
     }
-
-    getCategorySummaryData(){
-      let categorySummary=[]
-      categorySummary[0] = this.categoryWiseTaskSummaryData[0].ActionableTasks
-      categorySummary[1] = this.categoryWiseTaskSummaryData[0].CompletedTasks
-      categorySummary[2] = this.categoryWiseTaskSummaryData[0].OverdueTasks
-      categorySummary[3] = this.categoryWiseTaskSummaryData[0].TotalTasks
-      return categorySummary
+    getAttendanceType(){
+      let attendanceType=[]
+      this.employeeAttendanceSummaryData.forEach((ele)=>{
+        attendanceType.push(ele.Leave)
+      })
+      return attendanceType
+    }
+    getAttendanceSummaryData(){
+      let attendanceSummary=[]
+      this.employeeAttendanceSummaryData.forEach((ele)=>{
+        attendanceSummary.push(ele.Count)
+      })
+      return attendanceSummary
     }
 
     getTaskSummaryCategory(){
       let taskCategory=[]
-      this.taskWiseSummaryData.forEach((ele)=>{
-        taskCategory.push(ele.CategoryName)
+      this.employeeTaskSummaryChartData.forEach((ele)=>{
+        taskCategory.push(ele.CreatedOn.split('T')[0])
       })
       return taskCategory
     }
@@ -387,20 +391,20 @@ export class TaskManagerComponent implements OnInit {
       let totalTaskObj={name:'Total Tasks',data:[]}
       let completedTaskObj={name:'Completed Tasks',data:[]}
       let actionTaskObj={name:'Action Item',data:[]}
-      this.taskWiseSummaryData.forEach((ele)=>{
+      this.employeeTaskSummaryChartData.forEach((ele)=>{
         totalTaskObj.data.push(ele.TotalTasks)
         completedTaskObj.data.push(ele.CompletedTasks)
         actionTaskObj.data.push(ele.ActionItem)
       })
-      let taskSummaryCategoryData= [totalTaskObj,completedTaskObj,actionTaskObj]
-      return taskSummaryCategoryData
+      let employeeTaskSummaryCategoryData= [totalTaskObj,completedTaskObj,actionTaskObj]
+      return employeeTaskSummaryCategoryData
     }
 
-    initializeCategoryWiseTaskOptions(data:any){
+    initializeDesignationCountChartOptions(data:any){
       this.apexBarChart = {
         series: [
           {
-            data: this.categoryWiseData && this.getCategoryTaskCount()
+            data: this.employeeDesignationData && this.getDesignationCount()
           }
         ],
         chart: {
@@ -428,23 +432,21 @@ export class TaskManagerComponent implements OnInit {
           enabled: false
         },
         xaxis: {
-          categories: this.categoryWiseData && this.getCategories()
+          categories: this.employeeDesignationData && this.getDesignation()
         }
       };
     }
 
-    initializeCategoryWiseTaskSummary(data:any){
+    initializeEmployeeAttendanceSummary(data:any){
       this.apexDonutChart = {
-        series: this.getCategorySummaryData(),
+        series: this.getAttendanceSummaryData(),
         chart: {
           height: 350,
           type: 'donut'
         },
         colors: [
-          this.chartColors.donut.series1,
-          this.chartColors.donut.series2,
           this.chartColors.donut.series3,
-          this.chartColors.donut.series5
+          this.chartColors.donut.series2,
         ],
         // plotOptions: {
         //   pie: {
@@ -478,7 +480,7 @@ export class TaskManagerComponent implements OnInit {
           show: true,
           position: 'bottom'
         },
-        labels: ['Actionable Tasks', 'Completed Tasks', 'Overdue Tasks', 'Total Tasks'],
+        labels: this.getAttendanceType(),
         responsive: [
           {
             breakpoint: 480,
@@ -496,7 +498,7 @@ export class TaskManagerComponent implements OnInit {
 
     }
 
-    initializeTaskSummary(data:any){
+    initializeEmployeeTaskSummaryChart(data:any){
       this.apexColumnChart = {
         series: this.getTaskSummaryCategoryData(),
         chart: {
