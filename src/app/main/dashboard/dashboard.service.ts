@@ -83,6 +83,9 @@ export class DashboardService {
     const params = this.getParams(payload)
     return this._httpClient.get(`${environment.apiUrl}/GetAllTaskWiseSummaryChart`,{params});
   }
+  getAllTaskWiseStatus():Observable<any>{
+    return this._httpClient.get(`${environment.apiUrl}/GetAllTaskWiseStatusFinalDash?categoryId=2&occurance=M`);
+  }
 
   //Facility Members API
   getAllFacilityMembers(): Observable<any> {

@@ -114,6 +114,28 @@ export class TaskManagerComponent implements OnInit {
 
 
   public selectedProperty:any = [];
+  public defaultProperty:any={
+    "PropertyId": 4,
+    "PropertyTypeId": 5,
+    "Name": "Royal Nest GNW",
+    "AddressLine1": "Plot No. GH-8B, Tech Zone 4, W Rd, near ek Murti chowk, Greater Noida",
+    "AddressLine12": null,
+    "CityId": 38,
+    "ContactNumber": "8800190138",
+    "LanguageId": null,
+    "ProjectArea": null,
+    "TotalTowers": null,
+    "Totalunits": null,
+    "TotalCommercialUnits": null,
+    "Landmark": "galaxy chok",
+    "Pincode": "201306",
+    "IsActive": true,
+    "CreatedBy": 1,
+    "CreatedOn": "2021-10-21T13:11:37.213",
+    "UpdateOn": null,
+    "updatedby": null,
+    "IsDeleted": null
+}
   public selectedCategory:any = [];
   public selectedSubCategory:any = [];
   public selectedRepeatFrequency:any = [];
@@ -128,6 +150,7 @@ export class TaskManagerComponent implements OnInit {
   
   public categoryWiseTaskSummaryData=[]
   public taskWiseSummaryData=[]
+  public taskWiseStatusData=[]
 
   public dailyTasks:any=''
   public weeklyTasks:any=''
@@ -266,6 +289,11 @@ export class TaskManagerComponent implements OnInit {
 
     // modal Open Vertically Centered
     modalOpenVC(modalVC) {
+      console.log(this.selectedProperty)
+      this._dashboardService.getAllTaskWiseStatus().subscribe(res=>{
+        console.log(res)
+        this.taskWiseStatusData=res
+      })
       this.modalService.open(modalVC, {
         centered: true,
         size:'lg'
