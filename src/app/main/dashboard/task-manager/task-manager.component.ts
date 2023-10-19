@@ -230,10 +230,10 @@ export class TaskManagerComponent implements OnInit {
       this.getAllTaskPriorities()
       this.getDailyTaskDetails()
       this.getWeeklyTaskDetails()
-      this.getAllTaskWiseSummary()
-      this.getAllCategoryWiseTasks()
-      this.getCategoryWiseTaskSummary()
-      this.getTaskWiseSummary()
+      // this.getAllTaskWiseSummary()
+      // this.getAllCategoryWiseTasks()
+      // this.getCategoryWiseTaskSummary()
+      // this.getTaskWiseSummary()
     }
 
     filterData(){
@@ -246,20 +246,27 @@ export class TaskManagerComponent implements OnInit {
       this.selectedProperty = []
       this.selectedCategory=[]
       this.selectedSubCategory=[]
-      this.selectedRepeatFrequency = []
+      this.selectedRepeatFrequency = this.selectRepeatFrequency[3]
       this.selectedTaskStatus=[]
       this.selectedTaskPriority = []
       this.selectedDateFrom = []
       this.selectedDateTo=[]
-      this.getAllCategoryWiseTasks()
-      this.getCategoryWiseTaskSummary()
-      this.getTaskWiseSummary()
-      this.getAllTaskWiseSummary()
+      // this.getAllCategoryWiseTasks()
+      // this.getCategoryWiseTaskSummary()
+      // this.getTaskWiseSummary()
+      // this.getAllTaskWiseSummary()
+      this.getAllProperties()
     }
 
     getAllProperties(){
       this._dashboardService.getAllProperties().subscribe(response => {
         this.selectProperty = response
+        this.selectedProperty = this.selectProperty[3]
+        this.selectedRepeatFrequency = this.selectRepeatFrequency[3]
+      this.getAllCategoryWiseTasks()
+      this.getCategoryWiseTaskSummary()
+      this.getTaskWiseSummary()
+      this.getAllTaskWiseSummary()
       });
     }
 
@@ -288,10 +295,8 @@ export class TaskManagerComponent implements OnInit {
     }
 
     // modal Open Vertically Centered
-    modalOpenVC(modalVC) {
-      console.log(this.selectedProperty)
-      this._dashboardService.getAllTaskWiseStatus().subscribe(res=>{
-        console.log(res)
+    modalOpenVC(modalVC,categoryId) {
+      this._dashboardService.getAllTaskWiseStatus(categoryId,this.selectedRepeatFrequency.value).subscribe(res=>{
         this.taskWiseStatusData=res
       })
       this.modalService.open(modalVC, {

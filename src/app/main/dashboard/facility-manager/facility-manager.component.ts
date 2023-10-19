@@ -205,10 +205,6 @@ export class FacilityManagerComponent implements OnInit {
       this.getAllTaskPriorities()
       this.getAllFacilityMembers()
       this.getAllGuardsList()
-      this.getAllTaskWiseSummary()
-      this.getEmployeeDesignationCount()
-      this.getEmployeeAttendanceSummary()
-      this.getEmployeeTaskSummary()
     }
 
     filterData(){
@@ -221,20 +217,27 @@ export class FacilityManagerComponent implements OnInit {
       this.selectedProperty = []
       this.selectedCategory=[]
       this.selectedSubCategory=[]
-      this.selectedRepeatFrequency = []
+      this.selectedRepeatFrequency = this.selectRepeatFrequency[3]
       this.selectedTaskStatus=[]
       this.selectedTaskPriority = []
       this.selectedDateFrom = []
       this.selectedDateTo=[]
-      this.getEmployeeDesignationCount()
-      this.getEmployeeAttendanceSummary()
-      this.getEmployeeTaskSummary()
-      this.getAllTaskWiseSummary()
+      // this.getAllCategoryWiseTasks()
+      // this.getCategoryWiseTaskSummary()
+      // this.getTaskWiseSummary()
+      // this.getAllTaskWiseSummary()
+      this.getAllProperties()
     }
 
     getAllProperties(){
       this._dashboardService.getAllProperties().subscribe(response => {
         this.selectProperty = response
+        this.selectedProperty = this.selectProperty[3]
+        this.selectedRepeatFrequency = this.selectRepeatFrequency[3]
+        this.getAllTaskWiseSummary()
+        this.getEmployeeDesignationCount()
+        this.getEmployeeAttendanceSummary()
+        this.getEmployeeTaskSummary()
       });
     }
 

@@ -218,7 +218,7 @@
         <ngx-datatable-column name="Actions" [width]="120" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row">
             <div container="body">
-              <button type="button" class="btn icon-btn btn-sm" style="color: #7367f0;" rippleEffect (click)="modalOpenVC(modalVC)">
+              <button type="button" class="btn icon-btn btn-sm" style="color: #7367f0;" rippleEffect (click)="modalOpenVC(modalVC,row.CategoryId)">
                 <span [data-feather]="'eye'" [class]="'cursor-pointer'"></span>
               </button>
             </div>
