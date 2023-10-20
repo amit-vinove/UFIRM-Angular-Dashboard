@@ -247,12 +247,17 @@
       </div>
       <div class="modal-body" tabindex="0" ngbAutofocus>
         <div class="col-12">
-          <div class="row mb-1 mt-1 justify-content-md-end">
-            <fieldset class="form-group mb-0 mx-2">
-              <ng-select [items]="selectTaskStatus" [(ngModel)]="selectedModalTaskStatus" name="selectedModalTaskStatus"
-                bindLabel="name" placeholder="Select Status"></ng-select>
-            </fieldset> 
-            <button type="button" class="btn btn-primary" rippleEffect (click)="updateModalTasks()">Filter</button>
+          <div class="row mb-1 mt-1 justify-content-between">
+            <div>
+              Total Tasks: {{taskWiseStatusData.length}}
+            </div>
+            <div class="row justify-content-between">
+              <fieldset class="form-group mb-0 mx-2">
+                <ng-select [items]="selectTaskStatus" [(ngModel)]="selectedModalTaskStatus" name="selectedModalTaskStatus"
+                  bindLabel="name" placeholder="Select Status"></ng-select>
+              </fieldset> 
+              <button type="button" class="btn btn-primary" rippleEffect (click)="updateModalTasks()">Filter</button>
+            </div>
           </div>
         </div>
         <div class="table-responsive">
