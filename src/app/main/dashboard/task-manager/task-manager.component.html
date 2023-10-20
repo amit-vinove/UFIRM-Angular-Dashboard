@@ -12,8 +12,8 @@
                 </div>
               </div>
               <div class="media-body my-auto">
-                <h4 class="font-weight-bolder mb-0">{{ dailyTasks }}</h4>
-                <p class="card-text font-small-3 mb-0">Daily Tasks</p>
+                <h4 class="font-weight-bolder mb-0">{{ actionableTasks }}</h4>
+                <p class="card-text font-small-3 mb-0">Actionable Tasks</p>
               </div>
             </div>
           </div>
@@ -25,8 +25,8 @@
                 </div>
               </div>
               <div class="media-body my-auto">
-                <h4 class="font-weight-bolder mb-0">{{weeklyTasks }}</h4>
-                <p class="card-text font-small-3 mb-0">Weekly Tasks</p>
+                <h4 class="font-weight-bolder mb-0">{{pendingTasks }}</h4>
+                <p class="card-text font-small-3 mb-0">Pending Tasks</p>
               </div>
             </div>
           </div>
@@ -38,8 +38,8 @@
                 </div>
               </div>
               <div class="media-body my-auto">
-                <h4 class="font-weight-bolder mb-0">{{ overdueTasks }}</h4>
-                <p class="card-text font-small-3 mb-0">Overdue Tasks</p>
+                <h4 class="font-weight-bolder mb-0">{{completedTasks }}</h4>
+                <p class="card-text font-small-3 mb-0">Completed Tasks</p>
               </div>
             </div>
           </div>
@@ -117,13 +117,13 @@
     </div>
 
     <div class="row match-height">
-      <div class="col-xxl-6 col-lg-5 col-12">
+      <div class="col-xxl-6 col-lg-5 col-12" *ngIf="isFilterActive">
         <div class="card">
           <div class="card-body">
             <div id="bar-chart" #apexBarChartRef *ngIf="categoryWiseData.length>0">
               <apx-chart [series]="apexBarChart.series" [chart]="{
                     height: 400,
-                    width: 300,
+                    width: 500,
                     type: 'bar',
                     toolbar: {
                       show: false
@@ -138,13 +138,13 @@
           </div>
         </div>
       </div>
-      <div class="col-xxl-6 col-lg-5 col-12">
+      <div class="col-xxl-6 col-lg-5 col-12" *ngIf="isFilterActive">
         <div class="card">
           <div class="card-body">
             <div id="donut-chart" #apexDonutChartRef *ngIf="categoryWiseTaskSummaryData.length>0">
               <apx-chart [series]="apexDonutChart.series" [chart]="{
-                    height: 500,
-                    width: 300,
+                    height: 400,
+                    width: 600,
                     type: 'donut'
                   }" [labels]="apexDonutChart.labels" [plotOptions]="apexDonutChart.plotOptions"
                 [responsive]="apexDonutChart.responsive" [colors]="apexDonutChart.colors"
@@ -157,24 +157,21 @@
           </div>
         </div>
       </div>
-      <div class="col-xxl-8 col-lg-9 col-12">
+      <div class="col-xxl-6 col-lg-9 col-12" *ngIf="isFilterActive">
         <div class="card">
           <div class="card-body">
-            <div id="column-chart" #apexColumnChartRef *ngIf="taskWiseSummaryData.length>0">
-              <apx-chart [series]="apexColumnChart.series" [chart]="{
-                    type: 'bar',
-                    height: 400,
-                    width: 600,
-                    stacked: true,
-                    toolbar: {
-                      show: false
-                    }
-                  }" [xaxis]="apexColumnChart.xaxis" [stroke]="apexColumnChart.stroke"
-                [tooltip]="apexColumnChart.tooltip" [colors]="apexColumnChart.colors" [legend]="apexColumnChart.legend"
-                [dataLabels]="apexColumnChart.dataLabels" [plotOptions]="apexColumnChart.plotOptions"
-                [grid]="apexColumnChart.grid"></apx-chart>
+            <div id="column-chart" #apexPriorityBarChartRef *ngIf="taskPriorityCountData.length>0">
+              <apx-chart [series]="apexPriorityBarChart.series" [chart]="{
+                height: 400,
+                width: 650,
+                type: 'bar',
+                toolbar: {
+                  show: false
+                }
+              }" [dataLabels]="apexPriorityBarChart.dataLabels" [plotOptions]="apexPriorityBarChart.plotOptions"
+            [xaxis]="apexPriorityBarChart.xaxis" [colors]="apexPriorityBarChart.colors" [grid]="apexPriorityBarChart.grid"></apx-chart>
             </div>
-            <div class="noData-div" *ngIf="taskWiseSummaryData.length == 0">
+            <div class="noData-div" *ngIf="taskPriorityCountData.length == 0">
               <img src="assets/images/icons/noFile.png" alt="brand-logo" class="noData-img"/>
               <h3 class="noData-text">No Data Available</h3>
             </div>
@@ -183,7 +180,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card" *ngIf="isFilterActive">
       <div class="card-body">
         <ngx-datatable [rows]="taskSummaryData" [rowHeight]="50" class="bootstrap core-bootstrap"
         [limit]="selectedOption" [columnMode]="ColumnMode.force" [headerHeight]="50" [footerHeight]="50"
@@ -249,6 +246,15 @@
         <h5 class="modal-title" id="exampleModalCenterTitle">Task Details</h5>
       </div>
       <div class="modal-body" tabindex="0" ngbAutofocus>
+        <div class="col-12">
+          <div class="row mb-1 mt-1 justify-content-md-end">
+            <fieldset class="form-group mb-0 mx-2">
+              <ng-select [items]="selectTaskStatus" [(ngModel)]="selectedModalTaskStatus" name="selectedModalTaskStatus"
+                bindLabel="name" placeholder="Select Status"></ng-select>
+            </fieldset> 
+            <button type="button" class="btn btn-primary" rippleEffect (click)="updateModalTasks()">Filter</button>
+          </div>
+        </div>
         <div class="table-responsive">
           <table class="table">
             <thead>

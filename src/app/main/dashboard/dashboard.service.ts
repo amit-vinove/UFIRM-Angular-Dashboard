@@ -63,6 +63,10 @@ export class DashboardService {
   getWeeklyTaskDetails(): Observable<any> {
     return this._httpClient.get(`${environment.apiUrl}/TaskDetails?occurrence=W`);
   }
+  getTaskWiseStatusCount(payload):Observable<any>{
+    const params = this.getParams(payload)
+    return this._httpClient.get(`${environment.apiUrl}/GetAllTaskWiseStatusFinalCountDash`,{params});
+  }
   getAllTaskWiseSummary(payload:any): Observable<any> {
     const params = this.getParams(payload)
     return this._httpClient.get(`${environment.apiUrl}/GetAllTaskWiseSummary`,{params});
@@ -83,8 +87,15 @@ export class DashboardService {
     const params = this.getParams(payload)
     return this._httpClient.get(`${environment.apiUrl}/GetAllTaskWiseSummaryChart`,{params});
   }
-  getAllTaskWiseStatus(categoryId:any,occurance:any):Observable<any>{
-    return this._httpClient.get(`${environment.apiUrl}/GetAllTaskWiseStatusFinalDash?categoryId=${categoryId}&occurance=${occurance}`);
+  getAllTaskWiseStatus(payload):Observable<any>{
+    const params = this.getParams(payload)
+    return this._httpClient.get(`${environment.apiUrl}/GetAllTaskWiseStatusFinalDash`,{params});
+  }
+  getAllTaskPriorityCount(payload){
+    const params = this.getParams(payload)
+    return this._httpClient.get(
+      `${environment.apiUrl}/GetTaskPriorityCountDash`,{params},
+    );
   }
 
   //Facility Members API

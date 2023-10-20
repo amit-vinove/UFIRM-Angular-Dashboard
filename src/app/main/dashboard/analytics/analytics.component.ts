@@ -358,6 +358,8 @@ export class AnalyticsComponent implements OnInit {
         this.users = users;
       });
 
+       let payload={}
+
     // Get the dashboard service data
     this._dashboardService.getAllProperties().subscribe(response => {
       this.selectProperty = response

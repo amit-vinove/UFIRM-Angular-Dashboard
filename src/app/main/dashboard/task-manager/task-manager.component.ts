@@ -1,7 +1,7 @@
 import { Component, OnInit , ViewEncapsulation, ViewChild} from '@angular/core';
 import { first } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
+import Swal from 'sweetalert2';
 import { CoreConfigService } from '@core/services/config.service';
 import { ColumnMode, DatatableComponent } from "@swimlane/ngx-datatable";
 
@@ -76,10 +76,12 @@ export interface ChartOptions2 {
 export class TaskManagerComponent implements OnInit {
   
   @ViewChild('apexBarChartRef') apexBarChartRef: any;
+  @ViewChild('apexPriorityBarChartRef') apexPriorityBarChartRef: any;
   @ViewChild('apexDonutChartRef') apexDonutChartRef: any;
   @ViewChild('apexColumnChartRef') apexColumnChartRef: any;
 
   public apexBarChart: Partial<ChartOptions>;
+  public apexPriorityBarChart: Partial<ChartOptions>;
   public apexDonutChart: Partial<ChartOptions2>;
   public apexColumnChart: Partial<ChartOptions>;
 
@@ -114,47 +116,28 @@ export class TaskManagerComponent implements OnInit {
 
 
   public selectedProperty:any = [];
-  public defaultProperty:any={
-    "PropertyId": 4,
-    "PropertyTypeId": 5,
-    "Name": "Royal Nest GNW",
-    "AddressLine1": "Plot No. GH-8B, Tech Zone 4, W Rd, near ek Murti chowk, Greater Noida",
-    "AddressLine12": null,
-    "CityId": 38,
-    "ContactNumber": "8800190138",
-    "LanguageId": null,
-    "ProjectArea": null,
-    "TotalTowers": null,
-    "Totalunits": null,
-    "TotalCommercialUnits": null,
-    "Landmark": "galaxy chok",
-    "Pincode": "201306",
-    "IsActive": true,
-    "CreatedBy": 1,
-    "CreatedOn": "2021-10-21T13:11:37.213",
-    "UpdateOn": null,
-    "updatedby": null,
-    "IsDeleted": null
-}
   public selectedCategory:any = [];
   public selectedSubCategory:any = [];
   public selectedRepeatFrequency:any = [];
   public selectedTaskStatus:any = [];
+  public selectedModalTaskStatus:any=[]
   public selectedTaskPriority:any = [];
   public selectedDateFrom:any = [];
   public selectedDateTo:any = [];
 
   public taskSummaryData=[]
-
   public categoryWiseData=[]
-  
   public categoryWiseTaskSummaryData=[]
   public taskWiseSummaryData=[]
   public taskWiseStatusData=[]
+  public taskWiseStatusDefaultData=[]
+  public taskPriorityCountData:any=[]
 
-  public dailyTasks:any=''
-  public weeklyTasks:any=''
-  public overdueTasks:any=19
+  public actionableTasks:any=''
+  public completedTasks:any=''
+  public pendingTasks:any=''
+
+  public isFilterActive:boolean=false
 
     // Color Variables
     chartColors = {
@@ -228,45 +211,42 @@ export class TaskManagerComponent implements OnInit {
       this.getAllProperties()
       this.getAllCategories()
       this.getAllTaskPriorities()
-      this.getDailyTaskDetails()
-      this.getWeeklyTaskDetails()
+      this.getTaskWiseStatusCount()
       // this.getAllTaskWiseSummary()
       // this.getAllCategoryWiseTasks()
       // this.getCategoryWiseTaskSummary()
-      // this.getTaskWiseSummary()
+      // this.getAllTaskPriorityCount()
     }
 
     filterData(){
-      this.getAllCategoryWiseTasks()
-      this.getCategoryWiseTaskSummary()
-      this.getTaskWiseSummary()
-      this.getAllTaskWiseSummary()
+      if(this.selectedProperty.length ===0){
+        Swal.fire('Please select any Property', '', 'error');
+      } 
+      else{
+        this.getTaskWiseStatusCount()
+        this.getAllCategoryWiseTasks()
+        this.getCategoryWiseTaskSummary()
+        this.getAllTaskWiseSummary()
+        this.getAllTaskPriorityCount()
+        this.isFilterActive = true
+      }
     }
     resetData(){
       this.selectedProperty = []
       this.selectedCategory=[]
       this.selectedSubCategory=[]
-      this.selectedRepeatFrequency = this.selectRepeatFrequency[3]
+      this.selectedRepeatFrequency = []
       this.selectedTaskStatus=[]
       this.selectedTaskPriority = []
       this.selectedDateFrom = []
       this.selectedDateTo=[]
-      // this.getAllCategoryWiseTasks()
-      // this.getCategoryWiseTaskSummary()
-      // this.getTaskWiseSummary()
-      // this.getAllTaskWiseSummary()
-      this.getAllProperties()
+      this.getTaskWiseStatusCount()
+      this.isFilterActive = false
     }
 
     getAllProperties(){
       this._dashboardService.getAllProperties().subscribe(response => {
-        this.selectProperty = response
-        this.selectedProperty = this.selectProperty[3]
-        this.selectedRepeatFrequency = this.selectRepeatFrequency[3]
-      this.getAllCategoryWiseTasks()
-      this.getCategoryWiseTaskSummary()
-      this.getTaskWiseSummary()
-      this.getAllTaskWiseSummary()
+        this.selectProperty = response.filter(property => property.PropertyId === 4 || property.PropertyId === 14);
       });
     }
 
@@ -282,27 +262,53 @@ export class TaskManagerComponent implements OnInit {
       });
     }
 
-    getDailyTaskDetails(){
-      this._dashboardService.getDailyTaskDetails().subscribe(response=>{
-        this.dailyTasks = response.length
-      })
-    }
-
-    getWeeklyTaskDetails(){
-      this._dashboardService.getWeeklyTaskDetails().subscribe(response=>{
-        this.weeklyTasks = response.length
+    getTaskWiseStatusCount(){
+      let payload={
+        propId : this.selectedProperty?.PropertyId ? this.selectedProperty?.PropertyId :0 ,
+        categoryId:this.selectedCategory?.catId ? this.selectedCategory?.catId : 0,
+        subCategoryId:this.selectedSubCategory?.SubCategoryId ? this.selectedSubCategory?.SubCategoryId : 0,
+        occurance : this.selectedRepeatFrequency?.value ? this.selectedRepeatFrequency?.value : '',
+        status : this.selectedTaskStatus?.value ? this.selectedTaskStatus?.value : '',
+        priorityId : this.selectedTaskPriority?.Id ? this.selectedTaskPriority?.Id : 0,
+        dateFrom : this.selectedDateFrom?.length !==0 ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateTo?.day}`:'',
+        dateTo : this.selectedDateTo?.length !== 0  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
+      }
+      this._dashboardService.getTaskWiseStatusCount(payload).subscribe(response=>{
+        this.actionableTasks = response[0].Count
+        this.pendingTasks = response[1].Count
+        this.completedTasks = response[2].Count
       })
     }
 
     // modal Open Vertically Centered
     modalOpenVC(modalVC,categoryId) {
-      this._dashboardService.getAllTaskWiseStatus(categoryId,this.selectedRepeatFrequency.value).subscribe(res=>{
-        this.taskWiseStatusData=res
-      })
-      this.modalService.open(modalVC, {
-        centered: true,
-        size:'lg'
-      });
+      if(this.selectedRepeatFrequency.length ===0){
+        Swal.fire('Please select occurance', '', 'error');
+      }
+      else{
+        let payload={
+          categoryId:categoryId ? categoryId : 0,
+          occurance : this.selectedRepeatFrequency?.value ? this.selectedRepeatFrequency?.value : '',
+          status : this.selectedModalTaskStatus?.value ? this.selectedModalTaskStatus?.value : '',
+        }
+        this._dashboardService.getAllTaskWiseStatus(payload).subscribe(res=>{
+          this.taskWiseStatusData=res
+          this.taskWiseStatusDefaultData = res
+        })
+        this.modalService.open(modalVC, {
+          centered: true,
+          size:'lg'
+        });
+      }
+    }
+
+    updateModalTasks(){
+      if(this.selectedModalTaskStatus.value === ''){
+        this.taskWiseStatusData = this.taskWiseStatusDefaultData
+      }
+      else{
+        this.taskWiseStatusData = this.taskWiseStatusDefaultData.filter(task => task.TaskStatus === this.selectedModalTaskStatus.value);
+      }
     }
 
   
@@ -312,6 +318,7 @@ export class TaskManagerComponent implements OnInit {
       });
     }
 
+    //Task Table Data
     getAllTaskWiseSummary(){
       let payload={
         propId : this.selectedProperty?.PropertyId ? this.selectedProperty?.PropertyId :0 ,
@@ -328,8 +335,8 @@ export class TaskManagerComponent implements OnInit {
         this.taskSummaryData = res
       })
     }
-    // taskName , Date, assigned TO, weekly,
 
+    //Horizontal Bar Chart
     getAllCategoryWiseTasks(){
       let payload={
         propId : this.selectedProperty?.PropertyId ? this.selectedProperty?.PropertyId :0 ,
@@ -347,6 +354,7 @@ export class TaskManagerComponent implements OnInit {
       })
     }
 
+    //Donut Chart
     getCategoryWiseTaskSummary(){
       let payload={
         propId : this.selectedProperty?.PropertyId ? this.selectedProperty?.PropertyId :0 ,
@@ -380,6 +388,24 @@ export class TaskManagerComponent implements OnInit {
       })
     }
 
+    //Vertical Chart
+    getAllTaskPriorityCount(){
+      let payload={
+        propId : this.selectedProperty?.PropertyId ? this.selectedProperty?.PropertyId :0 ,
+        categoryId:this.selectedCategory?.catId ? this.selectedCategory?.catId : 0,
+        subCategoryId:this.selectedSubCategory?.SubCategoryId ? this.selectedSubCategory?.SubCategoryId : 0,
+        occurance : this.selectedRepeatFrequency?.value ? this.selectedRepeatFrequency?.value : '',
+        status : this.selectedTaskStatus?.value ? this.selectedTaskStatus?.value : '',
+        priorityId : this.selectedTaskPriority?.Id ? this.selectedTaskPriority?.Id : 0,
+        dateFrom : this.selectedDateFrom?.length !==0 ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateTo?.day}`:'',
+        dateTo : this.selectedDateTo?.length !== 0  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
+      }
+      this._dashboardService.getAllTaskPriorityCount(payload).subscribe(res=>{
+        this.taskPriorityCountData = res
+        this.initializeTaskPriorityChartOptions(this.taskPriorityCountData)
+      })
+    }
+
     onChangePageSize() {
       this.getAllTaskWiseSummary();
     }
@@ -397,6 +423,20 @@ export class TaskManagerComponent implements OnInit {
         categories.push(ele.Count)
       })
       return categories
+    }
+    getTaskChartPriorities(){
+      let priorities=[]
+      this.taskPriorityCountData.forEach((ele)=>{
+        priorities.push(ele.TaskPriority)
+      })
+      return priorities
+    }
+    getTaskPriorityCount(){
+      let priorityCount=[]
+      this.taskPriorityCountData.forEach((ele)=>{
+        priorityCount.push(ele.Count)
+      })
+      return priorityCount
     }
 
     getCategorySummaryData(){
@@ -471,7 +511,8 @@ export class TaskManagerComponent implements OnInit {
         series: this.getCategorySummaryData(),
         chart: {
           height: 350,
-          type: 'donut'
+          type: 'donut',
+          offsetX:20
         },
         colors: [
           this.chartColors.donut.series1,
@@ -479,56 +520,21 @@ export class TaskManagerComponent implements OnInit {
           this.chartColors.donut.series3,
           this.chartColors.donut.series5
         ],
-        // plotOptions: {
-        //   pie: {
-        //     donut: {
-        //       labels: {
-        //         show: true,
-        //         name: {
-        //           fontSize: '2rem',
-        //           fontFamily: 'Montserrat'
-        //         },
-        //         value: {
-        //           fontSize: '1rem',
-        //           fontFamily: 'Montserrat',
-        //           formatter: function (val) {
-        //             return parseInt(val) + '%';
-        //           }
-        //         },
-        //         total: {
-        //           show: true,
-        //           fontSize: '1.5rem',
-        //           label: 'Operational',
-        //           formatter: function (w) {
-        //             return '31%';
-        //           }
-        //         }
-        //       }
-        //     }
-        //   }
-        // },
         legend: {
           show: true,
           position: 'bottom'
         },
+        plotOptions: {
+          pie: {
+            offsetX: 0, // You can adjust this value as needed to center the chart
+          },
+        },
         labels: ['Actionable Tasks', 'Completed Tasks', 'Overdue Tasks', 'Total Tasks'],
-        responsive: [
-          {
-            breakpoint: 480,
-            options: {
-              chart: {
-                height: 300
-              },
-              legend: {
-                position: 'bottom'
-              }
-            }
-          }
-        ]
       };
 
     }
 
+    //Not in use as of now
     initializeTaskSummary(data:any){
       this.apexColumnChart = {
         series: this.getTaskSummaryCategoryData(),
@@ -592,6 +598,43 @@ export class TaskManagerComponent implements OnInit {
               return '$ ' + val + ' thousands';
             }
           }
+        }
+      };
+    }
+
+    initializeTaskPriorityChartOptions(data:any){
+      this.apexPriorityBarChart = {
+        series: [
+          {
+            data: this.taskPriorityCountData && this.getTaskPriorityCount()
+          }
+        ],
+        chart: {
+          height: 400,
+          type: 'bar',
+          toolbar: {
+            show: false
+          }
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            barHeight: '30%',
+          }
+        },
+        grid: {
+          xaxis: {
+            lines: {
+              show: false
+            }
+          }
+        },
+        colors: [colors.solid.primary],
+        dataLabels: {
+          enabled: false
+        },
+        xaxis: {
+          categories: this.taskPriorityCountData && this.getTaskChartPriorities()
         }
       };
     }
