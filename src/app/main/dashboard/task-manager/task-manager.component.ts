@@ -4,7 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { CoreConfigService } from '@core/services/config.service';
 import { ColumnMode, DatatableComponent } from "@swimlane/ngx-datatable";
-
+import { NgbDateStruct, NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { colors } from 'app/colors.const';
 import { User } from 'app/auth/models';
 import { UserService } from 'app/auth/service';
@@ -122,8 +122,8 @@ export class TaskManagerComponent implements OnInit {
   public selectedTaskStatus:any = [];
   public selectedModalTaskStatus:any=[]
   public selectedTaskPriority:any = [];
-  public selectedDateFrom:any = [];
-  public selectedDateTo:any = [];
+  public selectedDateFrom:NgbDateStruct
+  public selectedDateTo: NgbDateStruct
 
   public taskSummaryData=[]
   public categoryWiseData=[]
@@ -237,9 +237,7 @@ export class TaskManagerComponent implements OnInit {
       this.selectedSubCategory=[]
       this.selectedRepeatFrequency = []
       this.selectedTaskStatus=[]
-      this.selectedTaskPriority = []
-      this.selectedDateFrom = []
-      this.selectedDateTo=[]
+      this.assignDefaultDate()
       this.getTaskWiseStatusCount()
       this.isFilterActive = false
     }
@@ -248,6 +246,16 @@ export class TaskManagerComponent implements OnInit {
       this._dashboardService.getAllProperties().subscribe(response => {
         this.selectProperty = response.filter(property => property.PropertyId === 4 || property.PropertyId === 14);
       });
+      this.assignDefaultDate()
+    }
+
+    assignDefaultDate(){
+      const currentDate = new Date();
+      const day = currentDate.getDate();
+      const month = currentDate.getMonth() + 1;
+      const year = currentDate.getFullYear();
+      this.selectedDateFrom={year,month,day:1}
+      this.selectedDateTo = { year, month, day: day };
     }
 
     getAllCategories(){
@@ -270,14 +278,29 @@ export class TaskManagerComponent implements OnInit {
         occurance : this.selectedRepeatFrequency?.value ? this.selectedRepeatFrequency?.value : '',
         status : this.selectedTaskStatus?.value ? this.selectedTaskStatus?.value : '',
         priorityId : this.selectedTaskPriority?.Id ? this.selectedTaskPriority?.Id : 0,
-        dateFrom : this.selectedDateFrom?.length !==0 ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateTo?.day}`:'',
-        dateTo : this.selectedDateTo?.length !== 0  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
+        dateFrom : this.selectedDateFrom ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateFrom?.day}`:'',
+        dateTo : this.selectedDateTo ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
       }
-      this._dashboardService.getTaskWiseStatusCount(payload).subscribe(response=>{
-        this.actionableTasks = response[0].Count
-        this.pendingTasks = response[1].Count
-        this.completedTasks = response[2].Count
-      })
+      this._dashboardService.getTaskWiseStatusCount(payload).subscribe(response => {
+        let actionableTasks = 0;
+        let pendingTasks = 0;
+        let completedTasks = 0;
+      
+        response.forEach((item) => {
+          if (item.TaskStatus === 'Actionable') {
+            actionableTasks += item.Count;
+          } else if (item.TaskStatus === 'Pending') {
+            pendingTasks += item.Count;
+          } else if (item.TaskStatus === 'Completed') {
+            completedTasks += item.Count;
+          }
+        });
+      
+        this.actionableTasks = actionableTasks;
+        this.pendingTasks = pendingTasks;
+        this.completedTasks = completedTasks;
+      });
+      
     }
 
     // modal Open Vertically Centered
@@ -327,8 +350,8 @@ export class TaskManagerComponent implements OnInit {
         occurance : this.selectedRepeatFrequency?.value ? this.selectedRepeatFrequency?.value : '',
         status : this.selectedTaskStatus?.value ? this.selectedTaskStatus?.value : '',
         priorityId : this.selectedTaskPriority?.Id ? this.selectedTaskPriority?.Id : 0,
-        dateFrom : this.selectedDateFrom?.length !==0 ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateTo?.day}`:'',
-        dateTo : this.selectedDateTo?.length !== 0  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
+        dateFrom : this.selectedDateFrom ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateFrom?.day}`:'',
+        dateTo : this.selectedDateTo ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
       }
       this.taskSummaryData=[]
       this._dashboardService.getAllTaskWiseSummary(payload).subscribe(res=>{
@@ -345,8 +368,8 @@ export class TaskManagerComponent implements OnInit {
         occurance : this.selectedRepeatFrequency?.value ? this.selectedRepeatFrequency?.value : '',
         status : this.selectedTaskStatus?.value ? this.selectedTaskStatus?.value : '',
         priorityId : this.selectedTaskPriority?.Id ? this.selectedTaskPriority?.Id : 0,
-        dateFrom : this.selectedDateFrom?.length !==0 ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateTo?.day}`:'',
-        dateTo : this.selectedDateTo?.length !== 0  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
+        dateFrom : this.selectedDateFrom ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateFrom?.day}`:'',
+        dateTo : this.selectedDateTo  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
       }
       this._dashboardService.getAllCategoryWiseTasks(payload).subscribe(res=>{
         this.categoryWiseData = res
@@ -363,8 +386,8 @@ export class TaskManagerComponent implements OnInit {
         occurance : this.selectedRepeatFrequency?.value ? this.selectedRepeatFrequency?.value : '',
         status : this.selectedTaskStatus?.value ? this.selectedTaskStatus?.value : '',
         priorityId : this.selectedTaskPriority?.Id ? this.selectedTaskPriority?.Id : 0,
-        dateFrom : this.selectedDateFrom?.length !==0 ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateTo?.day}`:'',
-        dateTo : this.selectedDateTo?.length !== 0  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
+        dateFrom : this.selectedDateFrom ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateFrom?.day}`:'',
+        dateTo : this.selectedDateTo ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
       }
       this._dashboardService.getAllCategoryWiseTaskSummaryChart(payload).subscribe(res=>{
         this.categoryWiseTaskSummaryData = res
@@ -379,8 +402,8 @@ export class TaskManagerComponent implements OnInit {
         occurance : this.selectedRepeatFrequency?.value ? this.selectedRepeatFrequency?.value : '',
         status : this.selectedTaskStatus?.value ? this.selectedTaskStatus?.value : '',
         priorityId : this.selectedTaskPriority?.Id ? this.selectedTaskPriority?.Id : 0,
-        dateFrom : this.selectedDateFrom?.length !==0 ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateTo?.day}`:'',
-        dateTo : this.selectedDateTo?.length !== 0  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
+        dateFrom : this.selectedDateFrom ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateFrom?.day}`:'',
+        dateTo : this.selectedDateTo ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
       }
       this._dashboardService.getAllTaskWiseSummaryChart(payload).subscribe(res=>{
         this.taskWiseSummaryData = res
@@ -397,8 +420,8 @@ export class TaskManagerComponent implements OnInit {
         occurance : this.selectedRepeatFrequency?.value ? this.selectedRepeatFrequency?.value : '',
         status : this.selectedTaskStatus?.value ? this.selectedTaskStatus?.value : '',
         priorityId : this.selectedTaskPriority?.Id ? this.selectedTaskPriority?.Id : 0,
-        dateFrom : this.selectedDateFrom?.length !==0 ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateTo?.day}`:'',
-        dateTo : this.selectedDateTo?.length !== 0  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
+        dateFrom : this.selectedDateFrom ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateFrom?.day}`:'',
+        dateTo : this.selectedDateTo  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
       }
       this._dashboardService.getAllTaskPriorityCount(payload).subscribe(res=>{
         this.taskPriorityCountData = res
@@ -439,13 +462,17 @@ export class TaskManagerComponent implements OnInit {
       return priorityCount
     }
 
-    getCategorySummaryData(){
-      let categorySummary=[]
-      categorySummary[0] = this.categoryWiseTaskSummaryData[0].ActionableTasks
-      categorySummary[1] = this.categoryWiseTaskSummaryData[0].CompletedTasks
-      categorySummary[2] = this.categoryWiseTaskSummaryData[0].OverdueTasks
-      categorySummary[3] = this.categoryWiseTaskSummaryData[0].TotalTasks
-      return categorySummary
+    getCategorySummaryData() {
+      if (this.categoryWiseTaskSummaryData) {
+        return [
+          this.categoryWiseTaskSummaryData[0].ActionableTasks || 0,
+          this.categoryWiseTaskSummaryData[0].CompletedTasks || 0,
+          this.categoryWiseTaskSummaryData[0].OverdueTasks || 0,
+          this.categoryWiseTaskSummaryData[0].TotalTasks || 0
+        ];
+      }
+    
+      return [0, 0, 0, 0];
     }
 
     getTaskSummaryCategory(){

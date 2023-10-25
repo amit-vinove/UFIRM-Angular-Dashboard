@@ -88,7 +88,7 @@
               </div>
               <div class="col-12 col-md-3">
                 <div class="input-group">
-                  <input class="form-control" placeholder="Date From" name="Basic Date Picker"
+                  <input class="form-control" placeholder="Date From" name="Date From"
                     [(ngModel)]="selectedDateFrom" ngbDatepicker #basicDPfrom="ngbDatepicker">
                   <div class="input-group-append">
                     <button class="btn btn-outline-secondary feather icon-calendar" (click)="basicDPfrom.toggle()"
@@ -98,7 +98,7 @@
               </div>
               <div class="col-12 col-md-3">
                 <div class="input-group">
-                  <input class="form-control" placeholder="Date To" name="Basic Date Picker"
+                  <input class="form-control" placeholder="Date To" name="Date To"
                     [(ngModel)]="selectedDateTo" ngbDatepicker #basicDPto="ngbDatepicker">
                   <div class="input-group-append">
                     <button class="btn btn-outline-secondary feather icon-calendar" (click)="basicDPto.toggle()"
@@ -120,7 +120,7 @@
       <div class="col-xxl-6 col-lg-5 col-12" *ngIf="isFilterActive">
         <div class="card">
           <div class="card-body">
-            <div id="bar-chart" #apexBarChartRef *ngIf="categoryWiseData.length>0">
+            <div id="bar-chart" #apexBarChartRef *ngIf="categoryWiseData && categoryWiseData.length>0">
               <apx-chart [series]="apexBarChart.series" [chart]="{
                     height: 400,
                     width: 500,
@@ -141,7 +141,7 @@
       <div class="col-xxl-6 col-lg-5 col-12" *ngIf="isFilterActive">
         <div class="card">
           <div class="card-body">
-            <div id="donut-chart" #apexDonutChartRef *ngIf="categoryWiseTaskSummaryData.length>0">
+            <div id="donut-chart" #apexDonutChartRef *ngIf="categoryWiseTaskSummaryData && categoryWiseTaskSummaryData.length>0">
               <apx-chart [series]="apexDonutChart.series" [chart]="{
                     height: 400,
                     width: 600,
@@ -150,7 +150,7 @@
                 [responsive]="apexDonutChart.responsive" [colors]="apexDonutChart.colors"
                 [legend]="apexDonutChart.legend"></apx-chart>
             </div>
-            <div class="noData-div" *ngIf="categoryWiseTaskSummaryData.length == 0">
+            <div class="noData-div" *ngIf="!categoryWiseTaskSummaryData">
               <img src="assets/images/icons/noFile.png" alt="brand-logo" class="noData-img"/>
               <h3 class="noData-text">No Data Available</h3>
             </div>
@@ -160,7 +160,7 @@
       <div class="col-xxl-6 col-lg-9 col-12" *ngIf="isFilterActive">
         <div class="card">
           <div class="card-body">
-            <div id="column-chart" #apexPriorityBarChartRef *ngIf="taskPriorityCountData.length>0">
+            <div id="column-chart" #apexPriorityBarChartRef *ngIf="taskPriorityCountData && taskPriorityCountData.length>0">
               <apx-chart [series]="apexPriorityBarChart.series" [chart]="{
                 height: 400,
                 width: 650,
