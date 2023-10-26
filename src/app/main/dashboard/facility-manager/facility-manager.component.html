@@ -88,7 +88,7 @@
                 </div>
                 <div class="col-12 col-md-3">
                   <div class="input-group">
-                    <input class="form-control" placeholder="Date From" name="Basic Date Picker"
+                    <input class="form-control" placeholder="Date From" name="Date From"
                       [(ngModel)]="selectedDateFrom" ngbDatepicker #basicDPfrom="ngbDatepicker">
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary feather icon-calendar" (click)="basicDPfrom.toggle()"
@@ -98,7 +98,7 @@
                 </div>
                 <div class="col-12 col-md-3">
                   <div class="input-group">
-                    <input class="form-control" placeholder="Date To" name="Basic Date Picker"
+                    <input class="form-control" placeholder="Date To" name="Date To"
                       [(ngModel)]="selectedDateTo" ngbDatepicker #basicDPto="ngbDatepicker">
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary feather icon-calendar" (click)="basicDPto.toggle()"
@@ -117,7 +117,7 @@
       </div>
   
       <div class="row match-height">
-        <div class="col-xxl-6 col-lg-5 col-12">
+        <div class="col-xxl-6 col-lg-5 col-12" *ngIf="isFilterActive">
           <div class="card">
             <div class="card-body">
               <div id="bar-chart" #apexBarChartRef *ngIf="employeeDesignationData.length>0">
@@ -138,7 +138,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xxl-6 col-lg-5 col-12">
+        <div class="col-xxl-6 col-lg-5 col-12" *ngIf="isFilterActive">
           <div class="card">
             <div class="card-body">
               <div id="donut-chart" #apexDonutChartRef *ngIf="employeeAttendanceSummaryData.length>0">
@@ -157,7 +157,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xxl-8 col-lg-9 col-12">
+        <div class="col-xxl-8 col-lg-9 col-12" *ngIf="isFilterActive">
           <div class="card">
             <div class="card-body">
               <div id="column-chart" #apexColumnChartRef *ngIf="employeeTaskSummaryChartData.length>0">
@@ -183,7 +183,7 @@
         </div>
       </div>
   
-      <div class="card">
+      <div class="card" *ngIf="isFilterActive">
         <div class="card-body">
           <ngx-datatable [rows]="employeetaskSummaryData" [rowHeight]="50" class="bootstrap core-bootstrap"
           [limit]="selectedOption" [columnMode]="ColumnMode.force" [headerHeight]="50" [footerHeight]="50"

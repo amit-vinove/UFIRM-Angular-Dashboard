@@ -1,10 +1,10 @@
 import { Component, OnInit , ViewEncapsulation, ViewChild} from '@angular/core';
 import { first } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
+import Swal from 'sweetalert2';
 import { CoreConfigService } from '@core/services/config.service';
 import { ColumnMode, DatatableComponent } from "@swimlane/ngx-datatable";
-
+import { NgbDateStruct, NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { colors } from 'app/colors.const';
 import { User } from 'app/auth/models';
 import { UserService } from 'app/auth/service';
@@ -119,8 +119,8 @@ export class FacilityManagerComponent implements OnInit {
   public selectedRepeatFrequency:any = [];
   public selectedTaskStatus:any = [];
   public selectedTaskPriority:any = [];
-  public selectedDateFrom:any = [];
-  public selectedDateTo:any = [];
+  public selectedDateFrom:NgbDateStruct
+  public selectedDateTo: NgbDateStruct
 
   public employeetaskSummaryData=[]
   public employeeDesignationData=[]
@@ -166,6 +166,9 @@ export class FacilityManagerComponent implements OnInit {
     private $white = '#fff';
     private $textHeadingColor = '#5e5873';
   
+
+  public isFilterActive:boolean=false
+
     /**
      * Constructor
      *
@@ -208,37 +211,46 @@ export class FacilityManagerComponent implements OnInit {
     }
 
     filterData(){
-      this.getEmployeeDesignationCount()
-      this.getEmployeeAttendanceSummary()
-      this.getEmployeeTaskSummary()
-      this.getAllTaskWiseSummary()
+      if(this.selectedProperty.length ===0){
+        Swal.fire('Please select any Property', '', 'error');
+      } 
+      else{
+        this.getEmployeeDesignationCount()
+        this.getEmployeeAttendanceSummary()
+        this.getEmployeeTaskSummary()
+        this.getAllTaskWiseSummary()
+        this.isFilterActive = true
+      }
     }
     resetData(){
       this.selectedProperty = []
       this.selectedCategory=[]
       this.selectedSubCategory=[]
-      this.selectedRepeatFrequency = this.selectRepeatFrequency[3]
+      this.selectedRepeatFrequency = []
       this.selectedTaskStatus=[]
       this.selectedTaskPriority = []
-      this.selectedDateFrom = []
-      this.selectedDateTo=[]
+      this.assignDefaultDate()
       // this.getAllCategoryWiseTasks()
       // this.getCategoryWiseTaskSummary()
       // this.getTaskWiseSummary()
       // this.getAllTaskWiseSummary()
-      this.getAllProperties()
+      this.isFilterActive = false
     }
 
     getAllProperties(){
       this._dashboardService.getAllProperties().subscribe(response => {
-        this.selectProperty = response
-        this.selectedProperty = this.selectProperty[3]
-        this.selectedRepeatFrequency = this.selectRepeatFrequency[3]
-        this.getAllTaskWiseSummary()
-        this.getEmployeeDesignationCount()
-        this.getEmployeeAttendanceSummary()
-        this.getEmployeeTaskSummary()
+        this.selectProperty = response.filter(property => property.PropertyId === 4 || property.PropertyId === 14);
       });
+      this.assignDefaultDate()
+    }
+
+    assignDefaultDate(){
+      const currentDate = new Date();
+      const day = currentDate.getDate();
+      const month = currentDate.getMonth() + 1;
+      const year = currentDate.getFullYear();
+      this.selectedDateFrom={year,month,day:1}
+      this.selectedDateTo = { year, month, day: day };
     }
 
     getAllCategories(){
@@ -288,8 +300,8 @@ export class FacilityManagerComponent implements OnInit {
         occurance : this.selectedRepeatFrequency?.value ? this.selectedRepeatFrequency?.value : '',
         status : this.selectedTaskStatus?.value ? this.selectedTaskStatus?.value : '',
         priorityId : this.selectedTaskPriority?.Id ? this.selectedTaskPriority?.Id : 0,
-        dateFrom : this.selectedDateFrom?.length !==0 ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateTo?.day}`:'',
-        dateTo : this.selectedDateTo?.length !== 0  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
+        dateFrom : this.selectedDateFrom ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateFrom?.day}`:'',
+        dateTo : this.selectedDateTo ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
       }
       this.employeetaskSummaryData=[]
       this._dashboardService.getAllEmployeeWiseTaskSummary(payload).subscribe(res=>{
@@ -306,8 +318,8 @@ export class FacilityManagerComponent implements OnInit {
         occurance : this.selectedRepeatFrequency?.value ? this.selectedRepeatFrequency?.value : '',
         status : this.selectedTaskStatus?.value ? this.selectedTaskStatus?.value : '',
         priorityId : this.selectedTaskPriority?.Id ? this.selectedTaskPriority?.Id : 0,
-        dateFrom : this.selectedDateFrom?.length !==0 ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateTo?.day}`:'',
-        dateTo : this.selectedDateTo?.length !== 0  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
+        dateFrom : this.selectedDateFrom ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateFrom?.day}`:'',
+        dateTo : this.selectedDateTo ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
       }
       this._dashboardService.getEmployeeDesignationCount(payload).subscribe(res=>{
         this.employeeDesignationData = res
@@ -323,8 +335,8 @@ export class FacilityManagerComponent implements OnInit {
         occurance : this.selectedRepeatFrequency?.value ? this.selectedRepeatFrequency?.value : '',
         status : this.selectedTaskStatus?.value ? this.selectedTaskStatus?.value : '',
         priorityId : this.selectedTaskPriority?.Id ? this.selectedTaskPriority?.Id : 0,
-        dateFrom : this.selectedDateFrom?.length !==0 ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateTo?.day}`:'',
-        dateTo : this.selectedDateTo?.length !== 0  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
+        dateFrom : this.selectedDateFrom ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateFrom?.day}`:'',
+        dateTo : this.selectedDateTo  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
       }
       this._dashboardService.getAllEmployeeAttendanceSummary(payload).subscribe(res=>{
         this.employeeAttendanceSummaryData = res
@@ -340,8 +352,8 @@ export class FacilityManagerComponent implements OnInit {
         occurance : this.selectedRepeatFrequency?.value ? this.selectedRepeatFrequency?.value : '',
         status : this.selectedTaskStatus?.value ? this.selectedTaskStatus?.value : '',
         priorityId : this.selectedTaskPriority?.Id ? this.selectedTaskPriority?.Id : 0,
-        dateFrom : this.selectedDateFrom?.length !==0 ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateTo?.day}`:'',
-        dateTo : this.selectedDateTo?.length !== 0  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
+        dateFrom : this.selectedDateFrom ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateFrom?.day}`:'',
+        dateTo : this.selectedDateTo  ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
       }
       this._dashboardService.getAllEmployeeWiseTaskSummaryChartData(payload).subscribe(res=>{
         this.employeeTaskSummaryChartData = res
