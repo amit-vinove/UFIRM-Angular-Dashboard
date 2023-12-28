@@ -48,7 +48,25 @@ const users: User[] = [
     lastName: 'Doe',
     avatar: 'avatar-s-3.jpg',
     role: Role.User
-  }
+  },
+  {
+    id: 4,
+    email: 'piyush.gnw@gmail.com',
+    password: 'Abc@12345',
+    firstName: 'Piyush',
+    lastName: 'GNW',
+    avatar: 'avatar-s-11.jpg',
+    role: Role.Admin
+  },
+  {
+    id: 5,
+    email: 'kuldeep.rgr@gmail.com',
+    password: 'Abc@12345',
+    firstName: 'Kuldeep',
+    lastName: 'RGR',
+    avatar: 'avatar-s-11.jpg',
+    role: Role.Admin
+  },
 ];
 
 @Injectable()
