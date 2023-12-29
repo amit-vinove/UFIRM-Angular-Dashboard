@@ -24,7 +24,7 @@ import { User, Role } from 'app/auth/models';
 const users: User[] = [
   {
     id: 1,
-    email: 'admin@demo.com',
+    email: 'admin@mail.com',
     password: 'admin',
     firstName: 'John',
     lastName: 'Doe',

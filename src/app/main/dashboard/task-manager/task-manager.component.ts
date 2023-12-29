@@ -251,7 +251,7 @@ export class TaskManagerComponent implements OnInit {
           this.selectProperty = response.filter(property => property.PropertyId === 26);
         }
         else{
-          this.selectProperty = response.filter(property => property.PropertyId === 4 || property.PropertyId === 14);
+          this.selectProperty = response.filter(property => property.PropertyId === 4 || property.PropertyId === 14 || property.PropertyId===26);
         }
       });
       this.assignDefaultDate()
