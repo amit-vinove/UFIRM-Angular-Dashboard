@@ -247,7 +247,7 @@ export class TaskManagerComponent implements OnInit {
         if(this.currentUser.email === 'piyush.gnw@gmail.com'){
           this.selectProperty = response.filter(property => property.PropertyId === 4);
         }
-        else if(this.currentUser.email === 'kuldeep.rgr@gmail.com'){
+        else if(this.currentUser.email === 'aao.rgr@gmail.com'){
           this.selectProperty = response.filter(property => property.PropertyId === 26);
         }
         else{
@@ -279,8 +279,18 @@ export class TaskManagerComponent implements OnInit {
     }
 
     getTaskWiseStatusCount(){
+      let propertyId = 0
+      if(this.currentUser.email === 'piyush.gnw@gmail.com'){
+        propertyId = 4;
+      }
+      else if(this.currentUser.email === 'aao.rgr@gmail.com'){
+        propertyId = 26;
+      }
+      else{
+        propertyId = 0
+      }
       let payload={
-        propId : this.selectedProperty?.PropertyId ? this.selectedProperty?.PropertyId :0 ,
+        propId : propertyId ? propertyId :this.selectedProperty?.PropertyId ,
         categoryId:this.selectedCategory?.catId ? this.selectedCategory?.catId : 0,
         subCategoryId:this.selectedSubCategory?.SubCategoryId ? this.selectedSubCategory?.SubCategoryId : 0,
         occurance : this.selectedRepeatFrequency?.value ? this.selectedRepeatFrequency?.value : '',

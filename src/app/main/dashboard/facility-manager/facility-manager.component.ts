@@ -242,7 +242,7 @@ export class FacilityManagerComponent implements OnInit {
         if(this.currentUser.email === 'piyush.gnw@gmail.com'){
           this.selectProperty = response.filter(property => property.PropertyId === 4);
         }
-        else if(this.currentUser.email === 'kuldeep.rgr@gmail.com'){
+        else if(this.currentUser.email === 'aao.rgr@gmail.com'){
           this.selectProperty = response.filter(property => property.PropertyId === 26);
         }
         else{
@@ -278,7 +278,7 @@ export class FacilityManagerComponent implements OnInit {
       if(this.currentUser.email === 'piyush.gnw@gmail.com'){
         propertyId = 4
       }
-      else if(this.currentUser.email === 'kuldeep.rgr@gmail.com'){
+      else if(this.currentUser.email === 'aao.rgr@gmail.com'){
        propertyId = 26
       }
       else{

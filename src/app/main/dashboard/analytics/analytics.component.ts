@@ -385,7 +385,7 @@ export class AnalyticsComponent implements OnInit {
     if(this.currentUser.email === 'piyush.gnw@gmail.com'){
       propertyId = 4
     }
-    else if(this.currentUser.email === 'kuldeep.rgr@gmail.com'){
+    else if(this.currentUser.email === 'aao.rgr@gmail.com'){
      propertyId = 26
     }
     else{
@@ -403,7 +403,7 @@ export class AnalyticsComponent implements OnInit {
       if(this.currentUser.email === 'piyush.gnw@gmail.com'){
         propertyId = 4
       }
-      else if(this.currentUser.email === 'kuldeep.rgr@gmail.com'){
+      else if(this.currentUser.email === 'aao.rgr@gmail.com'){
        propertyId = 26
       }
       else{
@@ -424,7 +424,7 @@ export class AnalyticsComponent implements OnInit {
       if(this.currentUser.email === 'piyush.gnw@gmail.com'){
         propertyId = 4
       }
-      else if(this.currentUser.email === 'kuldeep.rgr@gmail.com'){
+      else if(this.currentUser.email === 'aao.rgr@gmail.com'){
        propertyId = 26
       }
       else{
@@ -441,7 +441,7 @@ export class AnalyticsComponent implements OnInit {
       if(this.currentUser.email === 'piyush.gnw@gmail.com'){
         propertyId = 4
       }
-      else if(this.currentUser.email === 'kuldeep.rgr@gmail.com'){
+      else if(this.currentUser.email === 'aao.rgr@gmail.com'){
        propertyId = 26
       }
       else{
@@ -459,7 +459,7 @@ export class AnalyticsComponent implements OnInit {
       if(this.currentUser.email === 'piyush.gnw@gmail.com'){
         propertyId = 4
       }
-      else if(this.currentUser.email === 'kuldeep.rgr@gmail.com'){
+      else if(this.currentUser.email === 'aao.rgr@gmail.com'){
        propertyId = 26
       }
       else{

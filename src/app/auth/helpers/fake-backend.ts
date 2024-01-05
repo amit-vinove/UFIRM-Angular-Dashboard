@@ -60,9 +60,9 @@ const users: User[] = [
   },
   {
     id: 5,
-    email: 'kuldeep.rgr@gmail.com',
+    email: 'aao.rgr@gmail.com',
     password: 'Abc@12345',
-    firstName: 'Kuldeep',
+    firstName: 'AAO',
     lastName: 'RGR',
     avatar: 'avatar-s-11.jpg',
     role: Role.Admin
