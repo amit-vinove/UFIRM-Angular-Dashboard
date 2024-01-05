@@ -321,6 +321,8 @@ export class TaskManagerComponent implements OnInit {
           categoryId:categoryId ? categoryId : 0,
           occurance : this.selectedRepeatFrequency?.value ? this.selectedRepeatFrequency?.value : '',
           status : this.selectedModalTaskStatus?.value ? this.selectedModalTaskStatus?.value : '',
+          dateFrom : this.selectedDateFrom ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateFrom?.day}`:'',
+          dateTo : this.selectedDateTo ? `${this.selectedDateTo?.year}-${this.selectedDateTo?.month}-${this.selectedDateTo?.day}`:''
         }
         this._dashboardService.getAllTaskWiseStatus(payload).subscribe(res=>{
           this.taskWiseStatusData=res

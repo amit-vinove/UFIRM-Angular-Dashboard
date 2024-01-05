@@ -57,11 +57,15 @@ export class DashboardService {
   getAllTaskPriorities(): Observable<any> {
     return this._httpClient.get(`${environment.apiUrl}/GetAllTaskPriorities`);
   }
-  getDailyTaskDetails(): Observable<any> {
-    return this._httpClient.get(`${environment.apiUrl}/TaskDetails?occurrence=D`);
+  getDailyTaskDetails(propId,date): Observable<any> {
+    console.log(propId)
+    return this._httpClient.get(`${environment.apiUrl}/TaskDetails?occurrence=D&propID=${propId}&dteFr=${date}&dteTo=${date}`);
   }
-  getWeeklyTaskDetails(): Observable<any> {
-    return this._httpClient.get(`${environment.apiUrl}/TaskDetails?occurrence=W`);
+  getWeeklyTaskDetails(propId,date): Observable<any> {
+    return this._httpClient.get(`${environment.apiUrl}/TaskDetails?occurrence=W&propID=${propId}&dteFr=${date}&dteTo=${date}`);
+  }
+  getMonthlyTaskDetails(propId,date): Observable<any> {
+    return this._httpClient.get(`${environment.apiUrl}/TaskDetails?occurrence=M&propID=${propId}&dteFr=${date}&dteTo=${date}`);
   }
   getTaskWiseStatusCount(payload):Observable<any>{
     const params = this.getParams(payload)

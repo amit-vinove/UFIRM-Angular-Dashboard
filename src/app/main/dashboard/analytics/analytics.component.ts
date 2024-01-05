@@ -65,10 +65,10 @@ export class AnalyticsComponent implements OnInit {
 
   public dailyTasks:any=''
   public weeklyTasks:any=''
-  public overdueTasks:any=19
+  public monthlyTasks:any=''
 
   public facilityMembers:any=''
-  public guardsList:any=''
+  public guardsList:any=0
   public vendors:any=12
 
   public supervisors:any=8
@@ -361,21 +361,18 @@ export class AnalyticsComponent implements OnInit {
        let payload={}
 
     // Get the dashboard service data
-    this._dashboardService.getAllProperties().subscribe(response => {
-      this.selectProperty = response
-    });
+    // this._dashboardService.getAllProperties().subscribe(response => {
+    //   this.selectProperty = response
+    // });
     this._dashboardService.getAllCategories().subscribe(response => {
       this.selectCategory = response
     });
     this._dashboardService.getAllTaskPriorities().subscribe(response => {
       this.selectTaskPriority = response
     });
-    this._dashboardService.getDailyTaskDetails().subscribe(response=>{
-      this.dailyTasks = response.length
-    })
-    this._dashboardService.getWeeklyTaskDetails().subscribe(response=>{
-      this.weeklyTasks = response.length
-    })
+    this.getDailyTasks()
+    this.getweeklyTasks()
+    this.getMonthlyTasks()
     this._dashboardService.getAllFacilityMembers().subscribe(response=>{
       this.facilityMembers = response.length
     })
@@ -384,7 +381,59 @@ export class AnalyticsComponent implements OnInit {
     })
     this._dashboardService.getEmployeeDesignationCount(4).subscribe(response=>{
       this.employeeDesignationCount = response
-      console.log(this.employeeDesignationCount)
+    })
+  }
+
+  getDailyTasks(){
+    let date = new Date()
+    const todayDate = date.toISOString().slice(0, 10);
+    let propertyId = 0
+      if(this.currentUser.email === 'piyush.gnw@gmail.com'){
+        propertyId = 4
+      }
+      else if(this.currentUser.email === 'kuldeep.rgr@gmail.com'){
+       propertyId = 26
+      }
+      else{
+        propertyId = 0
+      }
+    this._dashboardService.getDailyTaskDetails(propertyId,todayDate).subscribe(response=>{
+      this.dailyTasks = response.length
+    })
+  }
+  getweeklyTasks(){
+    let date = new Date()
+    const todayDate = date.toISOString().slice(0, 10);
+    let propertyId = 0
+      if(this.currentUser.email === 'piyush.gnw@gmail.com'){
+        propertyId = 4
+      }
+      else if(this.currentUser.email === 'kuldeep.rgr@gmail.com'){
+       propertyId = 26
+      }
+      else{
+        propertyId = 0
+      }
+    this._dashboardService.getWeeklyTaskDetails(propertyId,todayDate).subscribe(response=>{
+      this.weeklyTasks = response.length
+    })
+  }
+
+  getMonthlyTasks(){
+    let date = new Date()
+    const todayDate = date.toISOString().slice(0, 10);
+    let propertyId = 0
+      if(this.currentUser.email === 'piyush.gnw@gmail.com'){
+        propertyId = 4
+      }
+      else if(this.currentUser.email === 'kuldeep.rgr@gmail.com'){
+       propertyId = 26
+      }
+      else{
+        propertyId = 0
+      }
+    this._dashboardService.getMonthlyTaskDetails(propertyId,todayDate).subscribe(response=>{
+      this.monthlyTasks = response.length
     })
   }
 

@@ -239,7 +239,15 @@ export class FacilityManagerComponent implements OnInit {
 
     getAllProperties(){
       this._dashboardService.getAllProperties().subscribe(response => {
-        this.selectProperty = response.filter(property => property.PropertyId === 4 || property.PropertyId === 14);
+        if(this.currentUser.email === 'piyush.gnw@gmail.com'){
+          this.selectProperty = response.filter(property => property.PropertyId === 4);
+        }
+        else if(this.currentUser.email === 'kuldeep.rgr@gmail.com'){
+          this.selectProperty = response.filter(property => property.PropertyId === 26);
+        }
+        else{
+          this.selectProperty = response.filter(property => property.PropertyId === 4 || property.PropertyId === 14 || property.PropertyId===26);
+        }
       });
       this.assignDefaultDate()
     }
