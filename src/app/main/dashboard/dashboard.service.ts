@@ -58,12 +58,16 @@ export class DashboardService {
     return this._httpClient.get(`${environment.apiUrl}/GetAllTaskPriorities`);
   }
   getDailyTaskDetails(propId,date): Observable<any> {
-    console.log(propId)
     return this._httpClient.get(`${environment.apiUrl}/TaskDetails?occurrence=D&propID=${propId}&dteFr=${date}&dteTo=${date}`);
   }
   getWeeklyTaskDetails(propId,date): Observable<any> {
     return this._httpClient.get(`${environment.apiUrl}/TaskDetails?occurrence=W&propID=${propId}&dteFr=${date}&dteTo=${date}`);
   }
+
+  getTaskCountDetails(propId:any):Observable<any>{
+    return this._httpClient.get(`${environment.apiUrl}/GetAllTaskDetailsbyPropID?Propid=${propId}`)
+  }
+
   getMonthlyTaskDetails(propId,date): Observable<any> {
     return this._httpClient.get(`${environment.apiUrl}/TaskDetails?occurrence=M&propID=${propId}&dteFr=${date}&dteTo=${date}`);
   }
@@ -103,8 +107,8 @@ export class DashboardService {
   }
 
   //Facility Members API
-  getAllFacilityMembers(): Observable<any> {
-    return this._httpClient.get(`${environment.apiUrl}/GetAllFacilityMembers`);
+  getAllFacilityMembers(propId:any): Observable<any> {
+    return this._httpClient.get(`${environment.apiUrl}/GetAllFacilityMembersbyPropID?propid=${propId}`);
   }
   getGuardsList(): Observable<any> {
     return this._httpClient.get(`${environment.apiUrl}/GuardList`);

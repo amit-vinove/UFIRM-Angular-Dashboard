@@ -129,7 +129,7 @@ export class FacilityManagerComponent implements OnInit {
 
   public facilityMembers:any=''
   public guards:any=''
-  public vendors:any=19
+  public vendors:any=0
 
     // Color Variables
     chartColors = {
@@ -274,7 +274,17 @@ export class FacilityManagerComponent implements OnInit {
     }
 
     getAllFacilityMembers(){
-      this._dashboardService.getAllFacilityMembers().subscribe(response=>{
+      let propertyId = 0
+      if(this.currentUser.email === 'piyush.gnw@gmail.com'){
+        propertyId = 4
+      }
+      else if(this.currentUser.email === 'kuldeep.rgr@gmail.com'){
+       propertyId = 26
+      }
+      else{
+        propertyId = 0
+      }  
+      this._dashboardService.getAllFacilityMembers(propertyId).subscribe(response=>{
         this.facilityMembers = response.length
       })
     }

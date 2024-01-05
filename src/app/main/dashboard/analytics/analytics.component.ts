@@ -370,12 +370,8 @@ export class AnalyticsComponent implements OnInit {
     this._dashboardService.getAllTaskPriorities().subscribe(response => {
       this.selectTaskPriority = response
     });
-    this.getDailyTasks()
-    this.getweeklyTasks()
-    this.getMonthlyTasks()
-    this._dashboardService.getAllFacilityMembers().subscribe(response=>{
-      this.facilityMembers = response.length
-    })
+    this.getFacilityMemberCount()
+    this.getTaskCountDetails()
     this._dashboardService.getGuardsList().subscribe(response=>{
       this.guardsList = response.length
     })
@@ -383,6 +379,43 @@ export class AnalyticsComponent implements OnInit {
       this.employeeDesignationCount = response
     })
   }
+
+  getFacilityMemberCount(){
+    let propertyId = 0
+    if(this.currentUser.email === 'piyush.gnw@gmail.com'){
+      propertyId = 4
+    }
+    else if(this.currentUser.email === 'kuldeep.rgr@gmail.com'){
+     propertyId = 26
+    }
+    else{
+      propertyId = 0
+    }     
+    this._dashboardService.getAllFacilityMembers(propertyId).subscribe(response=>{
+      this.facilityMembers = response.length
+    })
+  }
+
+  getTaskCountDetails(){
+    let date = new Date()
+    const todayDate = date.toISOString().slice(0, 10);
+    let propertyId = 0
+      if(this.currentUser.email === 'piyush.gnw@gmail.com'){
+        propertyId = 4
+      }
+      else if(this.currentUser.email === 'kuldeep.rgr@gmail.com'){
+       propertyId = 26
+      }
+      else{
+        propertyId = 0
+      }
+    this._dashboardService.getTaskCountDetails(propertyId).subscribe(response=>{
+      this.dailyTasks = response[0].Daily,
+      this.weeklyTasks = response[0].Weekly,
+      this.monthlyTasks = response[0].Monthly
+    })
+  }
+
 
   getDailyTasks(){
     let date = new Date()

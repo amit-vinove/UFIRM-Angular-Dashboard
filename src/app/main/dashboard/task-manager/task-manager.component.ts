@@ -319,6 +319,7 @@ export class TaskManagerComponent implements OnInit {
       else{
         let payload={
           categoryId:categoryId ? categoryId : 0,
+          propId : this.selectedProperty?.PropertyId ? this.selectedProperty?.PropertyId :0,
           occurance : this.selectedRepeatFrequency?.value ? this.selectedRepeatFrequency?.value : '',
           status : this.selectedModalTaskStatus?.value ? this.selectedModalTaskStatus?.value : '',
           dateFrom : this.selectedDateFrom ? `${this.selectedDateFrom?.year}-${this.selectedDateFrom?.month}-${this.selectedDateFrom?.day}`:'',
